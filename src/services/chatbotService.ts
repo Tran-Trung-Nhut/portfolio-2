@@ -5,9 +5,9 @@ export interface ChatMessage {
   content: string;
 }
 
-const GROQ_API_URL = import.meta.env.VITE_GROQ_API_URL || 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_API_URL = import.meta.env.VITE_GROQ_API_URL || '';
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY || '';
-const MODEL = import.meta.env.VITE_GROQ_MODEL || 'llama3-8b-8192';
+const MODEL = import.meta.env.VITE_GROQ_MODEL || '';
 
 const buildContext = (query: string): string => {
   const lowerQuery = query.toLowerCase();
@@ -22,9 +22,9 @@ const buildContext = (query: string): string => {
   if (lowerQuery.match(/project|build|app|website|system|portfolio|work/i)) {
     contextParts.push(`Projects: ${JSON.stringify(projects)}`);
   }
-  
+
   if (lowerQuery.match(/skill|tech|stack|language|framework|tool|know/i)) {
-    contextParts.push(`Tech Stack: ${JSON.stringify(TECH_STACK.map(t => ({name: t.name, category: t.category})))}`);
+    contextParts.push(`Tech Stack: ${JSON.stringify(TECH_STACK.map(t => ({ name: t.name, category: t.category })))}`);
   }
 
   if (lowerQuery.match(/experience|work|job|role|company/i)) {
@@ -34,7 +34,7 @@ const buildContext = (query: string): string => {
   if (lowerQuery.match(/research|paper|publication|author|study/i)) {
     contextParts.push(`Publications: ${JSON.stringify(publications)}`);
   }
-  
+
   if (lowerQuery.match(/school|university|education|study|gpa/i)) {
     contextParts.push(`Education: Ho Chi Minh City University of Technology (HCMUT – VNU-HCM). Final-year Computer Science student.`);
   }
@@ -56,7 +56,7 @@ const buildContext = (query: string): string => {
 
 export const fetchChatbotResponse = async (userQuery: string, history: ChatMessage[]): Promise<string> => {
   if (!API_KEY || !MODEL || !GROQ_API_URL) {
-    return "I am having some issues right now 😔. Please try again later, or contact Nhựt directly through other channels on the <a href='/contact' style='color: #60a5fa; text-decoration: underline;'>Contact page</a>.";
+    return `I am having some issues right now 😔. Please try again later, or contact Nhựt directly through other channels on the [Contact page](/contact).`;
   }
 
   const isVietnamese = /[àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳýỵỷỹ]/i.test(userQuery);
@@ -101,9 +101,9 @@ Instructions:
     });
 
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("Groq API Error:", errorData);
-        throw new Error("API call failed.");
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Groq API Error:", errorData);
+      throw new Error("API call failed.");
     }
 
     const data = await response.json();
@@ -111,6 +111,6 @@ Instructions:
 
   } catch (error) {
     console.error("Chatbot Service Error:", error);
-    return "Oops! I encountered a network error while trying to think 😔. Please wait a moment and try again.";
+    return `I am having some issues right now 😔. Please try again later, or contact Nhựt directly through other channels on the [Contact page](/contact).`;
   }
 };
