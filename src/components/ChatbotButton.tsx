@@ -6,7 +6,7 @@ const ChatbotButton = () => {
   const [showTooltip, setShowTooltip] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
-  const isOnline = false;
+  const isOnline = true;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,7 +26,7 @@ const ChatbotButton = () => {
 
       {/* FAB Button always visible */}
       <div className="chatbot-fab-container">
-        <div className={`chatbot-tooltip ${showTooltip && !isOpen ? 'visible' : ''}`}>
+        <div className={`chatbot-tooltip ${showTooltip && !isOpen && isOnline ? 'visible' : ''}`}>
           Ask AI assistant about Nhựt
         </div>
         <button 
