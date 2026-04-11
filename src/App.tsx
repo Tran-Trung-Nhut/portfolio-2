@@ -8,6 +8,7 @@ import ExperiencePage from './pages/ExperiencePage';
 import ProjectsPage from './pages/ProjectsPage';
 import PublicationsPage from './pages/PublicationsPage';
 import ContactPage from './pages/ContactPage';
+import ChatbotButton from './components/ChatbotButton';
 import './index.css';
 
 const ScrollToTop = () => {
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
         <Footer />
+        <ChatbotButton />
       </div>
     </Router>
   );

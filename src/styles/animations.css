@@ -1,0 +1,277 @@
+/* ─── Animations ────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+@keyframes spinOrbit {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes counterSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes ambientFloat {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  33% { transform: translateY(-40px) translateX(25px); }
+  66% { transform: translateY(30px) translateX(-20px); }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Wide Screen Scaling ───────────────────────────────── */
+@media (min-width: 1440px) {
+  :root {
+    --max-width: 1320px;
+  }
+
+  .hero-content {
+    gap: 80px;
+  }
+
+  .hero-orbit-container {
+    max-width: 480px;
+  }
+
+  .orbit-ring-3 {
+    width: 480px;
+    height: 480px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --max-width: 1520px;
+  }
+
+  .hero-content {
+    gap: 100px;
+  }
+
+  .hero-orbit-container {
+    max-width: 540px;
+  }
+
+  .hero-portrait {
+    width: 210px;
+    height: 210px;
+  }
+
+  .orbit-ring-1 {
+    width: 310px;
+    height: 310px;
+  }
+
+  .orbit-ring-2 {
+    width: 400px;
+    height: 400px;
+  }
+
+  .orbit-ring-3 {
+    width: 540px;
+    height: 540px;
+  }
+
+  .orbit-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+}
+
+/* ─── Responsive (Shrinking) ────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 40px;
+  }
+
+  .hero-text {
+    align-items: center;
+  }
+
+  .hero-tagline {
+    margin: 0 auto;
+  }
+
+  .hero-cta {
+    justify-content: center;
+  }
+
+  .hero-social {
+    justify-content: center;
+  }
+
+  .hero-freelance-banner {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-orbit-container {
+    max-width: 380px;
+  }
+
+  .orbit-ring-3 {
+    width: 380px;
+    height: 380px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 64px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-mobile-toggle {
+    display: flex;
+  }
+
+  .hero {
+    padding: calc(var(--nav-height) + 16px) 16px 40px;
+  }
+
+  .hero-name {
+    font-size: 2rem;
+  }
+
+  .hero-orbit-container {
+    max-width: 300px;
+  }
+
+  .hero-portrait {
+    width: 140px;
+    height: 140px;
+  }
+
+  .orbit-ring-1 {
+    width: 220px;
+    height: 220px;
+  }
+
+  .orbit-ring-2 {
+    width: 280px;
+    height: 280px;
+  }
+
+  .orbit-ring-3 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .orbit-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+
+  .page-content {
+    padding: calc(var(--nav-height) + 24px) 16px 40px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .experience-timeline {
+    padding-left: 30px;
+  }
+
+  .exp-dot {
+    left: -23px;
+  }
+
+  .exp-card {
+    padding: 24px;
+  }
+
+  .freelance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-outline {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 20px 16px;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

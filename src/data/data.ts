@@ -1,22 +1,20 @@
 import {
-  FaReact, FaNodeJs, FaJava, FaAws, FaDocker, FaGitAlt, FaPhp
+  FaReact, FaNodeJs, FaJava, FaAws, FaDocker, FaGitAlt, FaPhp, FaWordpress, FaRobot,
+  FaMusic, FaCamera, FaRunning, FaGamepad
 } from "react-icons/fa";
 import {
   SiTypescript, SiPrisma, SiNestjs, SiPostgresql, SiRedis,
   SiExpress, SiDrizzle, SiMongodb, SiMysql,
   SiPython, SiJavascript, SiCplusplus,
   SiSpringboot, SiApachekafka, SiGo,
-  SiTailwindcss, SiSocketdotio, SiVite
+  SiTailwindcss, SiSocketdotio, SiVite,
+  SiAnthropic, SiGooglegemini, SiOpenai
 } from "react-icons/si";
-import type { IconType } from "react-icons";
+import { GiShuttlecock } from "react-icons/gi";
+
+import type { TechItem, Experience, Project, Publication, PersonalInfo, AboutInfo } from "../shared/types";
 
 // ─── TECH STACK ────────────────────────────────────────────
-export type TechItem = {
-  name: string;
-  icon: IconType;
-  color: string;
-  category: "language" | "backend" | "database" | "devops";
-};
 
 export const TECH_STACK: TechItem[] = [
   // Languages
@@ -28,12 +26,17 @@ export const TECH_STACK: TechItem[] = [
   { name: "C++", icon: SiCplusplus, color: "#00599C", category: "language" },
   { name: "PHP", icon: FaPhp, color: "#777BB4", category: "language" },
 
+  // Frontend
+  { name: "React", icon: FaReact, color: "#61DAFB", category: "frontend" },
+  { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4", category: "frontend" },
+  { name: "Vite", icon: SiVite, color: "#646CFF", category: "frontend" },
+
   // Backend
   { name: "NestJS", icon: SiNestjs, color: "#E0234E", category: "backend" },
   { name: "Spring Boot", icon: SiSpringboot, color: "#6DB33F", category: "backend" },
   { name: "Express", icon: SiExpress, color: "#FFFFFF", category: "backend" },
   { name: "Node.js", icon: FaNodeJs, color: "#339933", category: "backend" },
-  { name: "React", icon: FaReact, color: "#61DAFB", category: "backend" },
+  { name: "WordPress", icon: FaWordpress, color: "#21759B", category: "backend" },
   { name: "Socket.IO", icon: SiSocketdotio, color: "#FFFFFF", category: "backend" },
 
   // Databases
@@ -49,26 +52,20 @@ export const TECH_STACK: TechItem[] = [
   { name: "AWS", icon: FaAws, color: "#FF9900", category: "devops" },
   { name: "Kafka", icon: SiApachekafka, color: "#231F20", category: "devops" },
   { name: "Git", icon: FaGitAlt, color: "#F05032", category: "devops" },
-  { name: "Vite", icon: SiVite, color: "#646CFF", category: "devops" },
-  { name: "Tailwind", icon: SiTailwindcss, color: "#06B6D4", category: "devops" },
+  
+  // AI Techs
+  { name: "ChatGPT", icon: SiOpenai, color: "#412991", category: "llm" },
+  { name: "Gemini", icon: SiGooglegemini, color: "#8E75B2", category: "llm" },
+  { name: "Claude", icon: SiAnthropic, color: "#D97757", category: "llm" },
+  { name: "DeepSeek", icon: FaRobot, color: "#4D6BFE", category: "llm" },
 ];
 
 // Icons used for orbiting animation in Hero (subset)
 export const ORBIT_ICONS = TECH_STACK.filter(t =>
-  ["TypeScript", "NestJS", "PostgreSQL", "Docker", "React", "Spring Boot", "AWS", "Redis", "Go", "Python", "Node.js", "MongoDB"].includes(t.name)
+  ["TypeScript", "NestJS", "PostgreSQL", "Docker", "WordPress", "Spring Boot", "AWS", "Redis", "Go", "Python", "Node.js", "MongoDB"].includes(t.name)
 );
 
 // ─── EXPERIENCES ───────────────────────────────────────────
-export type Experience = {
-  id: number;
-  position: string;
-  company: string;
-  type: string;
-  period: { start: string; end: string };
-  location: { mode: string; address: string };
-  logo: string;
-  highlights: string[];
-};
 
 export const experiences: Experience[] = [
   {
@@ -101,16 +98,6 @@ export const experiences: Experience[] = [
 ];
 
 // ─── PROJECTS ──────────────────────────────────────────────
-export type Project = {
-  id: number;
-  title: string;
-  description: string;
-  techs: string[];
-  image?: string;
-  repoUrl: string[];
-  demoUrl?: string;
-  videoUrl?: string;
-};
 
 export const projects: Project[] = [
   {
@@ -126,16 +113,6 @@ export const projects: Project[] = [
 ];
 
 // ─── PUBLICATIONS ──────────────────────────────────────────
-export type Publication = {
-  id: number;
-  title: string;
-  venue: string;
-  year: number;
-  authors: string;
-  highlightAuthor: string;
-  abstract: string;
-  arxivUrl: string;
-};
 
 export const publications: Publication[] = [
   {
@@ -200,3 +177,37 @@ export const navItems = [
   { label: "Publications", path: "/publications" },
   { label: "Contact", path: "/contact" },
 ];
+
+// ─── PERSONAL INFO (HERO) ──────────────────────────────────
+export const personalInfo: PersonalInfo = {
+  greeting: "// Hello, World!",
+  firstName: "Trần Trung",
+  lastName: "Nhựt",
+  role: "Backend Developer",
+  tagline: " & Undergraduate Researcher at HCMUT – VNU-HCM. Passionate about building scalable systems, microservices, and clean API architecture.",
+  description: "Trần Trung Nhựt is a Backend Developer focusing on APIs, miscroservices, databases, and AI integration. He is also a passionate undergraduate researcher.",
+};
+
+// ─── ABOUT PAGE DATA ───────────────────────────────────────
+export const aboutInfo: AboutInfo = {
+  paragraphs: [
+    "Hi! I'm <span class=\"emphasis\">Trần Trung Nhựt</span>, a final-year Computer Science student at <span class=\"emphasis\">Ho Chi Minh City University of Technology (HCMUT – VNU-HCM)</span>. I was born and raised in Dong Thap Province, Vietnam.",
+    "I'm currently working as a <span class=\"emphasis\">Backend Developer at Nexon Dev Vina</span>, where I build and maintain backend services. My focus areas include API development, microservices architecture, and database optimization.",
+    "Beyond work, I'm an undergraduate researcher with a published paper at <span class=\"emphasis\">ICSA 2026</span> — exploring how Small Language Models reason about software architecture.",
+    "I also work as a <span class=\"emphasis\">freelance developer</span>, helping businesses build professional websites and web applications. From <span class=\"emphasis\">WordPress CMS</span> solutions to custom backends deployed on <span class=\"emphasis\">AWS</span>, I combine my engineering skills with <span class=\"emphasis\">AI-powered tools</span> to deliver modern, high-quality web experiences at speed.",
+    "When I'm not coding, you'll find me playing badminton, strumming my guitar, singing, running, or watching traveling vlogs and superhero movies."
+  ],
+  stats: [
+    { number: "3+", label: "Years Coding" },
+    { number: "1", label: "Projects Built" },
+    { number: "1", label: "Research Paper" },
+    { number: "2", label: "Companies" }
+  ],
+  hobbies: [
+    { name: "Badminton", icon: GiShuttlecock },
+    { name: "Music & Guitar", icon: FaMusic },
+    { name: "Photography", icon: FaCamera },
+    { name: "Running", icon: FaRunning },
+    { name: "Movies", icon: FaGamepad }
+  ]
+};
