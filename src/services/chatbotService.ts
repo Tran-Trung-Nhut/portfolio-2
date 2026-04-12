@@ -5,9 +5,9 @@ export interface ChatMessage {
   content: string;
 }
 
-const GROQ_API_URL = import.meta.env.VITE_GROQ_API_URL || '';
-const API_KEY = import.meta.env.VITE_GROQ_API_KEY || '';
-const MODEL = import.meta.env.VITE_GROQ_MODEL || '';
+const GROQ_API_URL = process.env.NEXT_PUBLIC_GROQ_API_URL || '';
+const API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY || '';
+const MODEL = process.env.NEXT_PUBLIC_GROQ_MODEL || '';
 
 const buildContext = (query: string): string => {
   const lowerQuery = query.toLowerCase();
@@ -59,13 +59,6 @@ export const fetchChatbotResponse = async (userQuery: string, history: ChatMessa
     return `I am having some issues right now 😔. Please try again later, or contact Nhựt directly through other channels on the [Contact page](/contact).`;
   }
 
-  const isVietnamese = /[àáãạảăắằẳẵặâấầẩẫậèéẹẻẽêềếểễệđìíĩỉịòóõọỏôốồổỗộơớờởỡợùúũụủưứừửữựỳýỵỷỹ]/i.test(userQuery);
-  const isOnlyNhut = userQuery.toLowerCase().trim() === 'nhựt';
-
-  if (isVietnamese && !isOnlyNhut) {
-    return "I'm sorry, I'm not very good at Vietnamese. Could you please ask in English? 😔";
-  }
-
   const contextData = buildContext(userQuery);
 
   const systemPrompt: ChatMessage = {
@@ -80,8 +73,8 @@ Instructions:
 2. Answer questions about Nhựt using ONLY the information provided above.
 3. NEVER say robotic things like "The provided context mentions", "I don't have information", or "Not specified". If you don't know something about Nhựt, reply politely with EXACTLY this meaning: "Oops, it seems Nhựt hasn't shared that with me yet! Please forgive me!"
 4. If the user asks how to contact Nhựt, tell them warmly to visit the "Contact" page on this website.
-5. Keep answers concise, professional, and directly address the user. Use markdown for formatting, like bolding key terms or using bullet lists for skills/technologies.
-6. All your responses MUST be in English. Do NOT answer in Vietnamese.
+5. Keep answers concise, professional, and directly address the user. Use markdown for formatting.
+6. Crucially, detect the language the user is speaking in and ALWAYS reply in that exact language. Use the provided English context data and translate it fluently and naturally into the user's language.
 `
   };
 

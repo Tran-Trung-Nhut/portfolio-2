@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef } from 'react';
 import { FaGithub, FaExternalLinkAlt, FaYoutube, FaCode } from 'react-icons/fa';
 import { projects } from '../data/data';
@@ -98,3 +99,4 @@ const ProjectsPage = () => {
 };
 
 export default ProjectsPage;
+

@@ -1,3 +1,4 @@
+'use client';
 import Hero from '../components/Hero';
 
 const HomePage = () => {
@@ -5,3 +6,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

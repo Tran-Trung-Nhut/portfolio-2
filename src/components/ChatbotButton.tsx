@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import { FaRobot } from 'react-icons/fa';
 import ChatbotWindow from './ChatbotWindow';

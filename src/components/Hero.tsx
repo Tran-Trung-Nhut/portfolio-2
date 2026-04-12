@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { FaDownload, FaEnvelope, FaGithub, FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
 import { ORBIT_ICONS, TECH_STACK, socialLinks, contactInfo, personalInfo } from '../data/data';
 import me from '../assets/me.png';
@@ -98,7 +98,7 @@ const Hero = () => {
             >
               <FaDownload /> Download CV
             </a>
-            <Link to="/contact" className="btn-outline">
+            <Link href="/contact" className="btn-outline">
               <FaEnvelope /> Get in Touch
             </Link>
           </div>
@@ -118,7 +118,7 @@ const Hero = () => {
             </a>
           </div>
 
-          <Link to="/contact" className="hero-freelance-banner">
+          <Link href="/contact" className="hero-freelance-banner">
             <span className="pulse-dot" />
             Need a website? Let's build it together.
           </Link>
@@ -127,7 +127,7 @@ const Hero = () => {
         {/* Orbit animation */}
         <div className="hero-orbit-container">
           <div className="hero-portrait">
-            <img src={me} alt="Trần Trung Nhựt" />
+            <img src={me.src} alt="Trần Trung Nhựt" />
           </div>
 
           {/* Ring 1 */}

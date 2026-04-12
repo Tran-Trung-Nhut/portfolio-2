@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef } from 'react';
 import { aboutInfo } from '../data/data';
 
@@ -61,3 +62,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+

@@ -135,7 +135,7 @@ export const socialLinks = {
   linkedin: "https://www.linkedin.com/in/tran-trung-nhut/",
   facebook: "https://www.facebook.com/tran.trung.nhut.nov.25th",
   instagram: "https://www.instagram.com/_ttnhwjt.25thnov/",
-  tiktok: "https://www.tiktok.com/@nhwtj2mais",
+  tiktok: "https://www.tiktok.com/@ttnhut_nov25th",
 };
 
 // ─── CONTACT INFO ──────────────────────────────────────────
@@ -143,7 +143,7 @@ export const contactInfo = {
   email: "ttnhut904@gmail.com",
   academicEmail: "nhut.trannov25th@hcmut.edu.vn",
   phone: "+84 389 819 223",
-  location: "Ward 15, Tan Binh, Ho Chi Minh City",
+  location: "Tan Son Ward, Ho Chi Minh City, Vietnam",
   languages: "Vietnamese & English",
   cvUrl: "https://drive.google.com/file/d/1dz0E1ZZQJUTHkst9x_KtNgDgu8rKZ6qP/view?usp=sharing",
 };

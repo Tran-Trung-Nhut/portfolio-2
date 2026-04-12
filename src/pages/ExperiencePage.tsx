@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef } from 'react';
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
 import { experiences } from '../data/data';
@@ -78,3 +79,4 @@ const ExperiencePage = () => {
 };
 
 export default ExperiencePage;
+

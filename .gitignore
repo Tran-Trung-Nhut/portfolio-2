@@ -1,6 +1,9 @@
 # Environments
 .env
 
+# Next.js
+.next
+
 # Logs
 logs
 *.log

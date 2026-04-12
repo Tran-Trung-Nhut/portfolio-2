@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import {
   FaEnvelope, FaPhone, FaMapMarkerAlt, FaGithub,
@@ -7,11 +8,12 @@ import { FaEarthAsia } from 'react-icons/fa6';
 import { contactInfo, socialLinks, freelanceServices } from '../data/data';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { sendContactEmail } from '../services/emailService';
 
 const ContactPage = () => {
   const revealRefs = useRef<HTMLDivElement[]>([]);
   const [sending, setSending] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -30,24 +32,34 @@ const ContactPage = () => {
     if (el && !revealRefs.current.includes(el)) revealRefs.current.push(el);
   };
 
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
       toast.error('Please fill all fields.');
       return;
     }
+
+    if (!isValidEmail(formData.email)) {
+      toast.error("Please enter a valid email address.", { autoClose: 4000 });
+      return;
+    }
+
     setSending(true);
 
-    // Send via mailto as fallback (no backend)
-    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    );
-    window.open(`mailto:${contactInfo.email}?subject=${subject}&body=${body}`, '_blank');
-
-    toast.success('Opening email client...');
-    setSending(false);
-    setFormData({ name: '', email: '', message: '' });
+    try {
+      await sendContactEmail(formData);
+      toast.success("Your message was sent successfully. Thank you for reaching out!", { autoClose: 5000 });
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      toast.error("Failed to send the message due to a server error. Please try again later or contact me directly.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -136,6 +148,16 @@ const ContactPage = () => {
             />
           </div>
           <div className="form-group">
+            <label htmlFor="contact-subject">Subject</label>
+            <input
+              id="contact-subject"
+              type="text"
+              placeholder="E.g., Freelance Project Inquiry"
+              value={formData.subject}
+              onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
             <label htmlFor="contact-message">Message</label>
             <textarea
               id="contact-message"
@@ -173,3 +195,4 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
+

@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useRef } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { publications } from '../data/data';
@@ -72,3 +73,4 @@ const PublicationsPage = () => {
 };
 
 export default PublicationsPage;
+

@@ -1,12 +1,15 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { navItems } from '../data/data';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -16,12 +19,12 @@ const Navbar = () => {
 
   useEffect(() => {
     setMobileOpen(false);
-  }, [location]);
+  }, [pathname]);
 
   return (
     <>
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <Link to="/" className="nav-logo">
+        <Link href="/" className="nav-logo">
           nhut<span>.dev</span>
         </Link>
 
@@ -29,8 +32,8 @@ const Navbar = () => {
           {navItems.map((item) => (
             <Link
               key={item.path}
-              to={item.path}
-              className={location.pathname === item.path ? 'active' : ''}
+              href={item.path}
+              className={pathname === item.path ? 'active' : ''}
             >
               {item.label}
             </Link>
@@ -50,8 +53,8 @@ const Navbar = () => {
         {navItems.map((item) => (
           <Link
             key={item.path}
-            to={item.path}
-            className={location.pathname === item.path ? 'active' : ''}
+            href={item.path}
+            className={pathname === item.path ? 'active' : ''}
           >
             {item.label}
           </Link>

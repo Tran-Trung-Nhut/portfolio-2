@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
@@ -80,7 +82,7 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
         <div className="chatbot-message bot-message">
           <p>
             {isOnline 
-              ? <>Hi! I'm Nhựt's AI assistant 👋 Ask me anything about his <strong>skills</strong>, <strong>projects</strong>, or <strong>background</strong>!</>
+              ? <>Hi! I'm Nhựt's AI assistant 👋 Ask me anything about his <strong>skills</strong>, <strong>projects</strong>, or <strong>background</strong>!<br /><br /><small style={{ opacity: 0.85, fontSize: '0.9em' }}>💡 <i>Tip: Using English yields the best and quickest responses!</i></small></>
               : "I am currently offline. Please come back later!"
             }
           </p>
