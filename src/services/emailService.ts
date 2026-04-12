@@ -8,9 +8,9 @@ export interface EmailPayload {
 }
 
 export const sendContactEmail = async (payload: EmailPayload) => {
-  const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || '';
-  const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || '';
-  const userId = process.env.NEXT_PUBLIC_EMAILJS_USER_ID || '';
+  const serviceId = process.env.EMAILJS_SERVICE_ID || '';
+  const templateId = process.env.EMAILJS_TEMPLATE_ID || '';
+  const userId = process.env.EMAILJS_USER_ID || '';
 
   if (!serviceId || !templateId || !userId) {
     throw new Error('MISSING_KEYS');

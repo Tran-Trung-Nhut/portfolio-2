@@ -5,9 +5,9 @@ export interface ChatMessage {
   content: string;
 }
 
-const GROQ_API_URL = process.env.NEXT_PUBLIC_GROQ_API_URL || '';
-const API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY || '';
-const MODEL = process.env.NEXT_PUBLIC_GROQ_MODEL || '';
+const GROQ_API_URL = process.env.GROQ_API_URL || '';
+const API_KEY = process.env.GROQ_API_KEY || '';
+const MODEL = process.env.GROQ_MODEL || '';
 
 const buildContext = (query: string): string => {
   const lowerQuery = query.toLowerCase();
