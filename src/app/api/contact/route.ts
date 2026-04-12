@@ -26,9 +26,10 @@ export async function POST(req: NextRequest) {
     const serviceId = process.env.EMAILJS_SERVICE_ID?.trim() || '';
     const templateId = process.env.EMAILJS_TEMPLATE_ID?.trim() || '';
     const userId = process.env.EMAILJS_USER_ID?.trim() || '';
-    const emailJsApiUrl = process.env.EMAILJS_API_URL?.trim() || 'https://api.emailjs.com/api/v1.0/email/send';
+    const private_key = process.env.EMAILJS_PRIVATE_KEY?.trim() || '';
+    const emailJsApiUrl = process.env.EMAILJS_API_URL?.trim() || '';
 
-    if (!serviceId || !templateId || !userId) {
+    if (!serviceId || !templateId || !userId || !private_key) {
       return NextResponse.json({ error: 'MISSING_KEYS' }, { status: 500 });
     }
 
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
         service_id: serviceId,
         template_id: templateId,
         user_id: userId,
+        accessToken: private_key,
         template_params: {
           from_name: name,
           from_email: email,
