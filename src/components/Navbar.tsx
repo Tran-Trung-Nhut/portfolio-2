@@ -2,13 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { navItems } from '../data/data';
+import logoPrimary from '../assets/logo.svg';
+import logoAlt from '../assets/logo.alt.png';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAlt, setIsAlt] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -21,11 +25,19 @@ const Navbar = () => {
     setMobileOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAlt((prev) => !prev);
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <>
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <Link href="/" className="nav-logo">
-          nhut<span>.dev</span>
+        <Link href="/" className={`nav-logo ${isAlt ? 'swapped' : ''}`}>
+          <Image src={logoPrimary} alt="nhut.dev logo" className="nav-logo-img nav-logo-primary" priority />
+          <Image src={logoAlt} alt="nhut.dev logo" className="nav-logo-img nav-logo-alt" priority />
         </Link>
 
         <div className="nav-links">
