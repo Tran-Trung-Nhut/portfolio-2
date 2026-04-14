@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { aboutInfo } from '../data/data';
+import { HOBBY_ICON_MAP, DEFAULT_HOBBY_ICON } from '@/shared/constants';
+import { AboutPageProps } from '@/shared/interfaces';
 
-const AboutPage = () => {
+const AboutPage = ({ profile, hobbies, stats }: AboutPageProps) => {
   const revealRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
@@ -35,21 +36,23 @@ const AboutPage = () => {
 
       <div className="about-grid">
         <div className="about-text reveal" ref={addRevealRef}>
-          {aboutInfo.paragraphs.map((paragraph, idx) => (
+          {profile.about_paragraphs && profile.about_paragraphs.map((paragraph, idx) => (
             <p key={idx} dangerouslySetInnerHTML={{ __html: paragraph }} />
           ))}
 
           <div className="about-hobbies">
-            {aboutInfo.hobbies.map((hobby) => (
+            {hobbies.map((hobby) => {
+              const IconComponent = HOBBY_ICON_MAP[hobby.name] || DEFAULT_HOBBY_ICON;
+              return (
               <span key={hobby.name} className="hobby-tag">
-                <hobby.icon /> {hobby.name}
+                {IconComponent && <IconComponent />} {hobby.name}
               </span>
-            ))}
+            )})}
           </div>
         </div>
 
         <div className="about-stats reveal" ref={addRevealRef}>
-          {aboutInfo.stats.map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="stat-card">
               <div className="stat-number">{stat.number}</div>
               <div className="stat-label">{stat.label}</div>

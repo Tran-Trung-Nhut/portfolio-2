@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { FaCalendarAlt, FaMapMarkerAlt } from 'react-icons/fa';
-import { experiences } from '../data/data';
+import { ExperiencePageProps } from '@/shared/interfaces';
 
-const ExperiencePage = () => {
+const ExperiencePage = ({ experiences }: ExperiencePageProps) => {
   const revealRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
@@ -52,11 +52,11 @@ const ExperiencePage = () => {
               <div className="exp-meta">
                 <span>
                   <FaCalendarAlt />
-                  {exp.period.start} — {exp.period.end}
+                  {exp.start_date} — {exp.end_date}
                 </span>
                 <span>
                   <FaMapMarkerAlt />
-                  {exp.location.mode} · {exp.location.address}
+                  {exp.location_mode} · {exp.location_address}
                 </span>
                 <span
                   className={`exp-badge ${exp.type === 'Full-time' ? 'full-time' : 'internship'}`}

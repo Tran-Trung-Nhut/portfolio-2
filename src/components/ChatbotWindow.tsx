@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
-import { fetchChatbotResponse } from '../services/chatbotService';
-import type { ChatMessage } from '../services/chatbotService';
+import { fetchChatbotResponse } from '@/services/chatbotService';
+import { ChatMessage } from '@/shared/interfaces';
 
 interface ChatbotWindowProps {
   isOpen: boolean;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ContactRequestBody, EmailJsSendPayload } from '../../../shared/interfaces';
+import { ContactRequestBody, EmailJsSendPayload } from '@/shared/interfaces';
 
 const isValidEmail = (email: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

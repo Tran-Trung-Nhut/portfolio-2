@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import { FaDownload, FaEnvelope, FaGithub, FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
-import { ORBIT_ICONS, TECH_STACK, socialLinks, contactInfo, personalInfo } from '../data/data';
-import me from '../assets/me.png';
+import type { Profile, TechItem } from '@/shared/types';
+import { TECH_ICON_MAP, DEFAULT_TECH_ICON } from '@/shared/constants';
+import me from '@/assets/me.png';
 
 const GALAXY_POSITIONS = [
   { left: '6%', top: '18%', size: '38px', delay: '0s', duration: '12s' },
@@ -26,20 +27,31 @@ const GALAXY_POSITIONS = [
   { left: '50%', top: '8%', size: '34px', delay: '1.1s', duration: '12s' }
 ];
 
-const Hero = () => {
+interface HeroProps {
+  profile: Profile;
+  techStack: TechItem[];
+}
+
+const Hero = ({ profile, techStack }: HeroProps) => {
+  const orbitIconNames = ["TypeScript", "NestJS", "PostgreSQL", "Docker", "WordPress", "Spring Boot", "AWS", "Redis", "Go", "Python", "Node.js", "MongoDB"];
+  
+  const orbitIcons = useMemo(() => {
+    return techStack.filter(t => orbitIconNames.includes(t.name));
+  }, [techStack]);
+
   // Position icons evenly around orbit rings
-  const ring1Icons = ORBIT_ICONS.slice(0, 4);
-  const ring2Icons = ORBIT_ICONS.slice(4, 8);
-  const ring3Icons = ORBIT_ICONS.slice(8, 12);
+  const ring1Icons = orbitIcons.slice(0, 4);
+  const ring2Icons = orbitIcons.slice(4, 8);
+  const ring3Icons = orbitIcons.slice(8, 12);
 
   // Background stars for large screens
   const galaxyIcons = useMemo(() => {
-    const remaining = TECH_STACK.filter(t => !ORBIT_ICONS.some(o => o.name === t.name));
+    const remaining = techStack.filter(t => !orbitIcons.some(o => o.name === t.name));
     return remaining.map((tech, i) => ({
       tech,
       pos: GALAXY_POSITIONS[i % GALAXY_POSITIONS.length]
     }));
-  }, []);
+  }, [techStack, orbitIcons]);
 
   const getIconPosition = (index: number, total: number, radius: number) => {
     const angle = (index / total) * 2 * Math.PI - Math.PI / 2;
@@ -54,7 +66,10 @@ const Hero = () => {
     <section className="hero" id="hero">
       <div className="hero-bg">
         <div className="galaxy-container">
-          {galaxyIcons.map(({ tech, pos }) => (
+          {galaxyIcons.map(({ tech, pos }) => {
+            const techMeta = TECH_ICON_MAP[tech.name] || DEFAULT_TECH_ICON;
+            const IconComponent = techMeta.icon;
+            return (
             <div
               key={`galaxy-${tech.name}`}
               className="galaxy-star-wrapper"
@@ -70,28 +85,28 @@ const Hero = () => {
                 style={{ width: pos.size, height: pos.size }}
                 title={tech.name}
               >
-                <tech.icon color={tech.color} />
+                {IconComponent && <IconComponent color={techMeta.color} />}
               </div>
             </div>
-          ))}
+          )})}
         </div>
       </div>
 
       <div className="hero-content">
         <div className="hero-text">
-          <p className="hero-greeting">{personalInfo.greeting}</p>
+          <p className="hero-greeting">{profile.greeting}</p>
 
           <h1 className="hero-name">
-            {personalInfo.firstName} <span>{personalInfo.lastName}</span>
+            {profile.first_name} <span>{profile.last_name}</span>
           </h1>
 
           <p className="hero-tagline">
-            <span className="highlight">{personalInfo.role}</span>{personalInfo.tagline}
+            <span className="highlight">{profile.role}</span>{profile.tagline}
           </p>
 
           <div className="hero-cta">
             <a
-              href={contactInfo.cvUrl}
+              href={profile.cv_url}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
@@ -104,18 +119,26 @@ const Hero = () => {
           </div>
 
           <div className="hero-social">
-            <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <FaGithub />
-            </a>
-            <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <FaLinkedin />
-            </a>
-            <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              <FaFacebook />
-            </a>
-            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <FaInstagram />
-            </a>
+            {profile.github_url && (
+              <a href={profile.github_url} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <FaGithub />
+              </a>
+            )}
+            {profile.linkedin_url && (
+              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <FaLinkedin />
+              </a>
+            )}
+            {profile.facebook_url && (
+              <a href={profile.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                <FaFacebook />
+              </a>
+            )}
+            {profile.instagram_url && (
+              <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                <FaInstagram />
+              </a>
+            )}
           </div>
 
           <Link href="/contact" className="hero-freelance-banner">
@@ -127,49 +150,58 @@ const Hero = () => {
         {/* Orbit animation */}
         <div className="hero-orbit-container">
           <div className="hero-portrait">
-            <img src={me.src} alt="Trần Trung Nhựt" />
+            <img src={me.src} alt={`${profile.first_name} ${profile.last_name}`} />
           </div>
 
           {/* Ring 1 */}
           <div className="orbit-ring orbit-ring-1">
-            {ring1Icons.map((tech, i) => (
+            {ring1Icons.map((tech, i) => {
+              const techMeta = TECH_ICON_MAP[tech.name] || DEFAULT_TECH_ICON;
+              const IconComponent = techMeta.icon;
+              return (
               <div
                 key={tech.name}
                 className="orbit-icon"
                 style={getIconPosition(i, ring1Icons.length, R1)}
                 title={tech.name}
               >
-                <tech.icon color={tech.color} />
+                {IconComponent && <IconComponent color={techMeta.color} />}
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Ring 2 */}
           <div className="orbit-ring orbit-ring-2">
-            {ring2Icons.map((tech, i) => (
+            {ring2Icons.map((tech, i) => {
+               const techMeta = TECH_ICON_MAP[tech.name] || DEFAULT_TECH_ICON;
+               const IconComponent = techMeta.icon;
+               return (
               <div
                 key={tech.name}
                 className="orbit-icon"
                 style={getIconPosition(i, ring2Icons.length, R2)}
                 title={tech.name}
               >
-                <tech.icon color={tech.color} />
+                {IconComponent && <IconComponent color={techMeta.color} />}
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Ring 3 */}
           <div className="orbit-ring orbit-ring-3">
-            {ring3Icons.map((tech, i) => (
+            {ring3Icons.map((tech, i) => {
+              const techMeta = TECH_ICON_MAP[tech.name] || DEFAULT_TECH_ICON;
+              const IconComponent = techMeta.icon;
+              return (
               <div
                 key={tech.name}
                 className="orbit-icon"
                 style={getIconPosition(i, ring3Icons.length, R3)}
                 title={tech.name}
               >
-                <tech.icon color={tech.color} />
+                {IconComponent && <IconComponent color={techMeta.color} />}
               </div>
-            ))}
+            )})}
           </div>
         </div>
       </div>

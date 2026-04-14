@@ -1,10 +1,17 @@
 import { Metadata } from 'next';
-import ContactPage from '../../pages/ContactPage';
+import ContactPage from '@/pages/ContactPage';
+import { getProfile, getFreelanceServices } from '@/services/supabaseService';
 
 export const metadata: Metadata = {
   title: 'Contact | Trần Trung Nhựt',
-  description: 'Get in touch with Trần Trung Nhựt for freelance work or hiring.',
-  keywords: 'Liên hệ Trần Trung Nhựt, thuê Trần Trung Nhựt làm web, Trần Trung Nhựt email, contact Trần Trung Nhựt, hire backend developer, freelance web developer contact',
+  description: 'Get in touch with Trần Trung Nhựt for freelance projects, collaborations, or open roles.',
 };
 
-export default function Page() { return <ContactPage />; }
+export default async function Page() { 
+  const profile = await getProfile();
+  const freelanceServices = await getFreelanceServices();
+  
+  if (!profile) return <div>Failed to load profile.</div>;
+
+  return <ContactPage profile={profile} freelanceServices={freelanceServices} />; 
+}

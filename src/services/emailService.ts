@@ -1,9 +1,4 @@
-export interface EmailPayload {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
+import { EmailPayload } from "@/shared/interfaces";
 
 export const sendContactEmail = async (payload: EmailPayload) => {
   const response = await fetch('/api/contact', {

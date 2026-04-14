@@ -100,14 +100,14 @@
   right: 2px;
   width: 14px;
   height: 14px;
-  background-color: #10B981; /* Emerald/Green */
-  border: 2px solid var(--bg-dark); /* match page background */
+  background-color: #10B981;
+  border: 2px solid var(--bg-dark); 
   border-radius: 50%;
   transition: background-color 0.3s;
 }
 
 .chatbot-online-dot.offline {
-  background-color: #6B7280; /* Gray for offline */
+  background-color: #6B7280;
 }
 
 /* ────────────────────────────────────────────────────────── */
@@ -116,7 +116,7 @@
 
 .chatbot-window {
   position: absolute;
-  bottom: 80px; /* Float above the FAB */
+  bottom: 80px; 
   right: 0;
   width: 380px;
   height: 600px;
@@ -218,7 +218,6 @@
   opacity: 1;
 }
 
-/* Body */
 .chatbot-body {
   flex: 1;
   padding: 20px;
@@ -228,11 +227,12 @@
   gap: 24px;
 }
 
-/* Chat Message Bubble */
 .chatbot-message {
   display: flex;
   flex-direction: column;
   max-width: 85%;
+  word-break: break-word;
+  overflow-wrap: anywhere;
   animation: messageSlideIn 0.3s ease-out forwards;
 }
 
