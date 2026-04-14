@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import AboutPage from '@/pages/AboutPage';
+import AboutPage from '@/views/AboutPage';
 import { getProfile, getHobbies, getProjects, getPublications, getExperiences } from '@/services/supabaseService';
 
 export const metadata: Metadata = {

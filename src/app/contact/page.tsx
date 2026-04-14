@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import ContactPage from '@/pages/ContactPage';
+import ContactPage from '@/views/ContactPage';
 import { getProfile, getFreelanceServices } from '@/services/supabaseService';
 
 export const metadata: Metadata = {

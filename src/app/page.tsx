@@ -1,4 +1,4 @@
-import HomePage from '@/pages/HomePage';
+import HomePage from '@/views/HomePage';
 import { getProfile, getTechStack } from '@/services/supabaseService';
 
 export default async function Page() { 
