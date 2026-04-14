@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { FaRobot } from 'react-icons/fa';
-import ChatbotWindow from './ChatbotWindow';
+import ChatbotWindow from '@/components/ChatbotWindow';
 
 const ChatbotButton = () => {
   const [showTooltip, setShowTooltip] = useState(true);

@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
-import { publications } from '../data/data';
+import { PublicationsPageProps } from '@/shared/interfaces';
 
-const PublicationsPage = () => {
+const PublicationsPage = ({ publications }: PublicationsPageProps) => {
   const revealRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
@@ -54,11 +54,11 @@ const PublicationsPage = () => {
             </span>
             <h3 className="pub-title">{pub.title}</h3>
             <p className="pub-authors">
-              {highlightAuthor(pub.authors, pub.highlightAuthor)}
+              {highlightAuthor(pub.authors, pub.highlight_author)}
             </p>
             <p className="pub-abstract">{pub.abstract}</p>
             <a
-              href={pub.arxivUrl}
+              href={pub.arxiv_url}
               target="_blank"
               rel="noopener noreferrer"
               className="pub-link"

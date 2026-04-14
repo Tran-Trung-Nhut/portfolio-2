@@ -5,12 +5,12 @@ import {
   FaLinkedin, FaFacebook, FaInstagram, FaTiktok, FaPaperPlane
 } from 'react-icons/fa';
 import { FaEarthAsia } from 'react-icons/fa6';
-import { contactInfo, socialLinks, freelanceServices } from '../data/data';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { sendContactEmail } from '../services/emailService';
+import { sendContactEmail } from '@/services/emailService';
+import { ContactPageProps } from '@/shared/interfaces';
 
-const ContactPage = () => {
+const ContactPage = ({ profile, freelanceServices }: ContactPageProps) => {
   const revealRefs = useRef<HTMLDivElement[]>([]);
   const [sending, setSending] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -79,7 +79,7 @@ const ContactPage = () => {
             <div className="contact-info-icon"><FaEnvelope /></div>
             <div>
               <div className="contact-info-label">Email</div>
-              <div className="contact-info-value">{contactInfo.email}</div>
+              <div className="contact-info-value">{profile.email}</div>
             </div>
           </div>
 
@@ -87,7 +87,7 @@ const ContactPage = () => {
             <div className="contact-info-icon"><FaEnvelope /></div>
             <div>
               <div className="contact-info-label">Academic Email</div>
-              <div className="contact-info-value">{contactInfo.academicEmail}</div>
+              <div className="contact-info-value">{profile.academic_email}</div>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ const ContactPage = () => {
             <div className="contact-info-icon"><FaPhone /></div>
             <div>
               <div className="contact-info-label">Phone</div>
-              <div className="contact-info-value">{contactInfo.phone}</div>
+              <div className="contact-info-value">{profile.phone}</div>
             </div>
           </div>
 
@@ -103,7 +103,7 @@ const ContactPage = () => {
             <div className="contact-info-icon"><FaMapMarkerAlt /></div>
             <div>
               <div className="contact-info-label">Location</div>
-              <div className="contact-info-value">{contactInfo.location}</div>
+              <div className="contact-info-value">{profile.location}</div>
             </div>
           </div>
 
@@ -111,16 +111,16 @@ const ContactPage = () => {
             <div className="contact-info-icon"><FaEarthAsia /></div>
             <div>
               <div className="contact-info-label">Languages</div>
-              <div className="contact-info-value">{contactInfo.languages}</div>
+              <div className="contact-info-value">{profile.languages}</div>
             </div>
           </div>
 
           <div className="contact-social">
-            <a href={socialLinks.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub /></a>
-            <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedin /></a>
-            <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebook /></a>
-            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>
-            <a href={socialLinks.tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok"><FaTiktok /></a>
+            {profile.github_url && <a href={profile.github_url} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><FaGithub /></a>}
+            {profile.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><FaLinkedin /></a>}
+            {profile.facebook_url && <a href={profile.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Facebook"><FaFacebook /></a>}
+            {profile.instagram_url && <a href={profile.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><FaInstagram /></a>}
+            {profile.tiktok_url && <a href={profile.tiktok_url} target="_blank" rel="noopener noreferrer" aria-label="TikTok"><FaTiktok /></a>}
           </div>
         </div>
 

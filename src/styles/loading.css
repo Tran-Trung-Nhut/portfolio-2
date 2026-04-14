@@ -1,0 +1,173 @@
+/* ─── Loading Component ────────────────────────────────────────── */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+.loader-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-orbit {
+  position: absolute;
+  border-radius: 50%;
+  border: 4px solid transparent;
+}
+
+.loader-orbit-1 {
+  width: 180px;
+  height: 180px;
+  border-top: 3px solid var(--accent-primary);
+  border-right: 3px solid var(--accent-primary);
+  animation: spin 1.5s linear infinite;
+}
+
+.loader-orbit-2 {
+  width: 150px;
+  height: 150px;
+  border-bottom: 3px solid var(--accent-cyan);
+  border-left: 3px solid var(--accent-cyan);
+  animation: spinReverse 2s linear infinite;
+}
+
+.loader-logo {
+  position: relative;
+  z-index: 10;
+  width: 110px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseLogo 3s ease-in-out infinite;
+}
+
+.loader-logo img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* Ensure the logo shrinks or grows to fit the box without cropping */
+}
+
+.loader-logo-svg {
+  animation: fadeAlt 10s infinite ease-in-out;
+}
+
+.loader-logo-alt {
+  transform: scale(1.15); /* Slightly scaled up but safegaurded by object-fit */
+  animation: fadeAltReverse 10s infinite ease-in-out;
+}
+
+.loading-text {
+  margin-top: 1.5rem;
+  color: var(--accent-cyan);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-align: center;
+  animation: pulseText 1.5s infinite alternate;
+}
+
+/* Animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes pulseLogo {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.9; }
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.5; text-shadow: none; }
+  100% { opacity: 1; text-shadow: 0 0 16px var(--accent-cyan); }
+}
+
+@keyframes fadeAlt {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeAltReverse {
+  0%, 45% { opacity: 0; }
+  50%, 95% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── Responsive Media Queries ─────────────────────────────────────── */
+@media screen and (max-width: 768px) {
+  .loader-container {
+    width: 140px;
+    height: 140px;
+  }
+  .loader-orbit-1 {
+    width: 140px;
+    height: 140px;
+    border-width: 3px;
+  }
+  .loader-orbit-2 {
+    width: 115px;
+    height: 115px;
+    border-width: 3px;
+  }
+  .loader-logo {
+    width: 85px;
+    height: 85px;
+  }
+  .loading-text {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-top: 1.2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .loader-container {
+    width: 110px;
+    height: 110px;
+  }
+  .loader-orbit-1 {
+    width: 110px;
+    height: 110px;
+    border-width: 2px;
+  }
+  .loader-orbit-2 {
+    width: 90px;
+    height: 90px;
+    border-width: 2px;
+  }
+  .loader-logo {
+    width: 65px;
+    height: 65px;
+  }
+  .logo-alt {
+    transform: scale(1.1); 
+  }
+  .loading-text {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-top: 1rem;
+  }
+}

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import '../index.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import ChatbotButton from '../components/ChatbotButton';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import ChatbotButton from '@/components/ChatbotButton';
 
 export const metadata: Metadata = {
   title: 'Trần Trung Nhựt – Portfolio',

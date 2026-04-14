@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaYoutube, FaCode } from 'react-icons/fa';
-import { projects } from '../data/data';
+import { FaGithub, FaExternalLinkAlt, FaCode } from 'react-icons/fa';
+import { ProjectsPageProps } from '@/shared/interfaces';
 
-const ProjectsPage = () => {
+const ProjectsPage = ({ projects }: ProjectsPageProps) => {
   const revealRefs = useRef<HTMLDivElement[]>([]);
 
   useEffect(() => {
@@ -63,31 +63,22 @@ const ProjectsPage = () => {
             </div>
 
             <div className="project-card-links">
-              {project.repoUrl.length > 0 && (
+              {project.repo_urls && project.repo_urls.length > 0 && (
                 <a
-                  href={project.repoUrl[0]}
+                  href={project.repo_urls[0]}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaGithub /> Code
                 </a>
               )}
-              {project.demoUrl && (
+              {project.demo_url && (
                 <a
-                  href={project.demoUrl}
+                  href={project.demo_url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <FaExternalLinkAlt /> Live Demo
-                </a>
-              )}
-              {project.videoUrl && (
-                <a
-                  href={project.videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaYoutube /> Video
                 </a>
               )}
             </div>

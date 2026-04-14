@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import { navItems } from '../data/data';
-import logoPrimary from '../assets/logo.svg';
-import logoAlt from '../assets/logo.alt.png';
+import { navItems } from '@/shared/constants';
+import logoPrimary from '@/assets/logo.svg';
+import logoAlt from '@/assets/logo.alt.png';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);

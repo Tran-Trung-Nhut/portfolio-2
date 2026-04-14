@@ -1,7 +1,4 @@
-export interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-}
+import { ChatMessage } from "@/shared/interfaces";
 
 export const fetchChatbotResponse = async (userQuery: string, history: ChatMessage[]): Promise<string> => {
   try {
