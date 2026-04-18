@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://trantrungnhut.vercel.app/sitemap.xml',
+    sitemap: 'https://trantrungnhut.id.vn/sitemap.xml',
   };
 }

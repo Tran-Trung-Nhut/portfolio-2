@@ -5,10 +5,14 @@ import Footer from '@/components/Footer';
 import ChatbotButton from '@/components/ChatbotButton';
 
 export const metadata: Metadata = {
-  title: 'Trần Trung Nhựt – Portfolio',
+  metadataBase: new URL('https://trantrungnhut.id.vn'),
+  title: 'Trần Trung Nhựt',
   description: 'Backend Developer, Researcher & Freelancer based in Ho Chi Minh City, Vietnam.',
-  keywords: 'Trần Trung Nhựt, Trung Nhựt, Nhựt, Trần Nhựt, Backend Developer, Software Engineer, NestJS, Spring Boot, AWS, HCMUT, portfolio, freelancer',
+  keywords: 'Trần Trung Nhựt, Trung Nhựt, Nhựt, Trần Nhựt, Nhựt Trần, Backend Developer, Software Engineer, NestJS, Spring Boot, AWS, HCMUT, portfolio, freelancer',
   authors: [{ name: 'Trần Trung Nhựt' }],
+  alternates: {
+    canonical: '/',
+  },
   verification: {
     google: '6vOBLrYyd4n7uieDZPqMh7siTCJZWXJDS6b8dSO059Y',
   },
@@ -16,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Trần Trung Nhựt – Portfolio',
     description: 'Backend Developer • Researcher • Freelancer',
     type: 'website',
-    url: 'https://trantrungnhut.vercel.app',
+    url: 'https://trantrungnhut.id.vn',
     images: [{
       url: '/me.png',
       width: 800,
@@ -47,7 +51,7 @@ export default function RootLayout({
               "name": "Trần Trung Nhựt",
               "jobTitle": "Backend Developer",
               "description": "Backend Developer, Researcher & Freelancer based in Ho Chi Minh City, Vietnam.",
-              "url": "https://trantrungnhut.vercel.app",
+              "url": "https://trantrungnhut.id.vn",
               "sameAs": [
                 "https://www.linkedin.com/in/tran-trung-nhut",
                 "https://www.github.com/Tran-Trung-Nhut"
