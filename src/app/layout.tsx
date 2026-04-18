@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 import ChatbotButton from '@/components/ChatbotButton';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://trantrungnhut.id.vn'),
+  metadataBase: new URL('https://www.trantrungnhut.id.vn'),
   title: 'Trần Trung Nhựt',
   description: 'Backend Developer, Researcher & Freelancer based in Ho Chi Minh City, Vietnam.',
   keywords: 'Trần Trung Nhựt, Trung Nhựt, Nhựt, Trần Nhựt, Nhựt Trần, Backend Developer, Software Engineer, NestJS, Spring Boot, AWS, HCMUT, portfolio, freelancer',
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: 'Trần Trung Nhựt – Portfolio',
     description: 'Backend Developer • Researcher • Freelancer',
     type: 'website',
-    url: 'https://trantrungnhut.id.vn',
+    url: 'https://www.trantrungnhut.id.vn',
     images: [{
       url: '/me.png',
       width: 800,
@@ -51,7 +51,7 @@ export default function RootLayout({
               "name": "Trần Trung Nhựt",
               "jobTitle": "Backend Developer",
               "description": "Backend Developer, Researcher & Freelancer based in Ho Chi Minh City, Vietnam.",
-              "url": "https://trantrungnhut.id.vn",
+              "url": "https://www.trantrungnhut.id.vn",
               "sameAs": [
                 "https://www.linkedin.com/in/tran-trung-nhut",
                 "https://www.github.com/Tran-Trung-Nhut"
