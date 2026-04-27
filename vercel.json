@@ -1,5 +1,21 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "trantrungnhut.vercel.app"
+        }
+      ],
+      "destination": "https://www.trantrungnhut.id.vn/$1",
+      "permanent": true
+    }
   ]
 }
