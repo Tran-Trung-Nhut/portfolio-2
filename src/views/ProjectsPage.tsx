@@ -38,53 +38,55 @@ const ProjectsPage = ({ projects }: ProjectsPageProps) => {
         Real client projects I've built as a freelance developer.
       </p>
 
-      {projects.map((project) => (
-        <div key={project.id} className="project-featured reveal" ref={addRevealRef}>
-          {project.image ? (
-            <div className="project-featured-image">
-              <img src={project.image} alt={project.title} />
-            </div>
-          ) : (
-            <div className="project-featured-placeholder">
-              <FaCode />
-            </div>
-          )}
+      <div className="projects-grid">
+        {projects.map((project) => (
+          <div key={project.id} className="project-card reveal" ref={addRevealRef}>
+            {project.image ? (
+              <div className="project-card-image">
+                <img src={project.image} alt={project.title} />
+              </div>
+            ) : (
+              <div className="project-card-placeholder">
+                <FaCode />
+              </div>
+            )}
 
-          <div className="project-featured-body">
-            <h3 className="project-featured-title">{project.title}</h3>
-            <p className="project-featured-desc">{project.description}</p>
+            <div className="project-card-body">
+              <h3 className="project-card-title">{project.title}</h3>
+              <p className="project-card-desc">{project.description}</p>
 
-            <div className="project-card-techs">
-              {project.techs.map((tech) => (
-                <span key={tech} className="tech-tag">
-                  {tech}
-                </span>
-              ))}
-            </div>
+              <div className="project-card-techs">
+                {project.techs.map((tech) => (
+                  <span key={tech} className="tech-tag">
+                    {tech}
+                  </span>
+                ))}
+              </div>
 
-            <div className="project-card-links">
-              {project.repo_urls && project.repo_urls.length > 0 && (
-                <a
-                  href={project.repo_urls[0]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaGithub /> Code
-                </a>
-              )}
-              {project.demo_url && (
-                <a
-                  href={project.demo_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaExternalLinkAlt /> Live Demo
-                </a>
-              )}
+              <div className="project-card-links">
+                {project.repo_urls && project.repo_urls.length > 0 && (
+                  <a
+                    href={project.repo_urls[0]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaGithub /> Code
+                  </a>
+                )}
+                {project.demo_url && (
+                  <a
+                    href={project.demo_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <FaExternalLinkAlt /> Live Demo
+                  </a>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
