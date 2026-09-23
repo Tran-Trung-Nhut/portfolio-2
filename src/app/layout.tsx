@@ -22,9 +22,7 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://www.trantrungnhut.id.vn',
     images: [{
-      url: '/me.png',
-      width: 800,
-      height: 600,
+      url: '/api/portrait',
       alt: 'Trần Trung Nhựt Portfolio Preview'
     }],
   }
@@ -38,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" type="image/png" href="/me.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />

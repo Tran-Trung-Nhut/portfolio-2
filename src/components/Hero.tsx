@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { FaDownload, FaEnvelope, FaGithub, FaLinkedin, FaFacebook, FaInstagram } from 'react-icons/fa';
 import type { Profile, TechItem } from '@/shared/types';
 import { TECH_ICON_MAP, DEFAULT_TECH_ICON } from '@/shared/constants';
-import me from '@/assets/me.png';
 
 const GALAXY_POSITIONS = [
   { left: '6%', top: '18%', size: '38px', delay: '0s', duration: '12s' },
@@ -150,13 +149,7 @@ const Hero = ({ profile, techStack }: HeroProps) => {
         {/* Orbit animation */}
         <div className="hero-orbit-container">
           <div className="hero-portrait">
-            <img
-              src="/api/portrait"
-              alt={`${profile.first_name} ${profile.last_name}`}
-              onError={(e) => {
-                if (!e.currentTarget.src.endsWith(me.src)) e.currentTarget.src = me.src;
-              }}
-            />
+            <img src="/api/portrait" alt={`${profile.first_name} ${profile.last_name}`} />
           </div>
 
           {/* Ring 1 */}
