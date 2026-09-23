@@ -8,9 +8,10 @@ import {
   SiPython, SiJavascript, SiCplusplus,
   SiSpringboot, SiApachekafka, SiGo,
   SiTailwindcss, SiSocketdotio, SiVite,
-  SiAnthropic, SiGooglegemini, SiOpenai
+  SiAnthropic, SiGooglegemini
 } from "react-icons/si";
 import { GiShuttlecock } from "react-icons/gi";
+import { RiOpenaiFill } from "react-icons/ri";
 import { IconType } from "react-icons";
 import { IconDescriptor } from '@/shared/interfaces';
 
@@ -52,7 +53,7 @@ export const TECH_ICON_MAP: Record<string, IconDescriptor> = {
   "AWS": { icon: FaAws, color: "#FF9900" },
   "Kafka": { icon: SiApachekafka, color: "#231F20" },
   "Git": { icon: FaGitAlt, color: "#F05032" },
-  "ChatGPT": { icon: SiOpenai, color: "#412991" },
+  "ChatGPT": { icon: RiOpenaiFill, color: "#412991" },
   "Gemini": { icon: SiGooglegemini, color: "#8E75B2" },
   "Claude": { icon: SiAnthropic, color: "#D97757" },
   "DeepSeek": { icon: FaRobot, color: "#4D6BFE" },

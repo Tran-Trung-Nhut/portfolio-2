@@ -106,7 +106,7 @@ const Hero = ({ profile, techStack }: HeroProps) => {
 
           <div className="hero-cta">
             <a
-              href={profile.cv_url}
+              href="/api/cv"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
@@ -150,7 +150,13 @@ const Hero = ({ profile, techStack }: HeroProps) => {
         {/* Orbit animation */}
         <div className="hero-orbit-container">
           <div className="hero-portrait">
-            <img src={me.src} alt={`${profile.first_name} ${profile.last_name}`} />
+            <img
+              src="/api/portrait"
+              alt={`${profile.first_name} ${profile.last_name}`}
+              onError={(e) => {
+                if (!e.currentTarget.src.endsWith(me.src)) e.currentTarget.src = me.src;
+              }}
+            />
           </div>
 
           {/* Ring 1 */}

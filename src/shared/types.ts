@@ -54,7 +54,6 @@ export interface Profile {
   phone: string;
   location: string;
   languages: string;
-  cv_url: string;
   github_url: string;
   linkedin_url: string;
   facebook_url: string;
