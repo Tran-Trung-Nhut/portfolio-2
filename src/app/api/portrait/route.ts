@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { S3_BUCKET, presignGetObject, s3Key } from '@/lib/s3';
 
-const PORTRAIT_FILENAME = 'image.JPG';
+const PORTRAIT_FILENAME = 'image.jpg';
 const URL_TTL_SECONDS = 3 * 24 * 60 * 60;
 const WINDOW_SECONDS = 24 * 60 * 60;
 
