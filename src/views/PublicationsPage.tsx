@@ -40,6 +40,12 @@ const PublicationsPage = ({ publications }: PublicationsPageProps) => {
     );
   };
 
+  const getPaperLinkLabel = (url: string) => {
+    if (url.includes('arxiv.org')) return 'Read on arXiv';
+    if (url.includes('ieee.org')) return 'Read on IEEE Xplore';
+    return 'Read Paper';
+  };
+
   return (
     <div className="page-content">
       <h2 className="section-title reveal" ref={addRevealRef}>
@@ -63,7 +69,7 @@ const PublicationsPage = ({ publications }: PublicationsPageProps) => {
               rel="noopener noreferrer"
               className="pub-link"
             >
-              Read on arXiv <FaArrowRight />
+              {getPaperLinkLabel(pub.arxiv_url)} <FaArrowRight />
             </a>
           </div>
         ))}

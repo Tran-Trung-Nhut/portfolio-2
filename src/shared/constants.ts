@@ -78,6 +78,9 @@ export const DEFAULT_HOBBY_ICON: IconType = FaRobot;
 export const FALLBACK_MESSAGE =
   'I am having some issues right now 😔. Please try again later, or contact Nhựt directly through other channels on the [Contact page](/contact).';
 
+// One lookup per topic, plus the final answer
+export const MAX_TOOL_ROUNDS = 6;
+
 export const TOOLS = [
   {
     type: "function",

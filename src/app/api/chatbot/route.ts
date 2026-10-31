@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProfile, getExperiences, getProjects, getPublications, getTechStack } from '@/services/supabaseService';
 import { ChatbotRequestBody, ChatMessage } from '@/shared/interfaces';
-import { FALLBACK_MESSAGE, TOOLS } from '@/shared/constants';
+import { FALLBACK_MESSAGE, MAX_TOOL_ROUNDS, TOOLS } from '@/shared/constants';
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,40 +34,43 @@ export async function POST(req: NextRequest) {
                 4. If the question is NOT about Nhựt: you may answer freely using your general knowledge, in a natural and useful way.
                 5. Never invent or hallucinate facts about Nhựt. If the tool does not provide the answer, say you don't know it yet.
                 6. Reply in the same language as the user's latest message.
-                7. Format your replies with markdown where appropriate.
+                7. Format your replies with simple markdown only: bold, bullet lists, and links. Never use tables or HTML tags.
                 8. Do not mention about the tool in your answer`
     };
 
 
     let messages = [systemPrompt, ...recentHistory, { role: 'user', content: userQuery }];
+    let responseMessage;
 
-    // Initial API call
-    let response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model,
-        messages,
-        temperature: 0.5,
-        max_tokens: 1200,
-        tools: TOOLS,
-        tool_choice: "auto"
-      }),
-    });
+    // Keep tools available on every round, the model may ask for another topic after seeing a result
+    for (let round = 0; round < MAX_TOOL_ROUNDS; round++) {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: 0.5,
+          max_tokens: 1200,
+          tools: TOOLS,
+          tool_choice: "auto"
+        }),
+      });
 
-    if (!response.ok) {
-      console.error("Groq initial error:", await response.text());
-      return NextResponse.json({ message: FALLBACK_MESSAGE }, { status: 200 });
-    }
+      if (!response.ok) {
+        console.error("Groq error:", await response.text());
+        return NextResponse.json({ message: FALLBACK_MESSAGE }, { status: 200 });
+      }
 
-    let data = await response.json();
-    let responseMessage = data?.choices?.[0]?.message;
+      const data = await response.json();
+      responseMessage = data?.choices?.[0]?.message;
 
-    // Check if the model wants to call a tool
-    if (responseMessage?.tool_calls) {
+      // Check if the model wants to call a tool
+      if (!responseMessage?.tool_calls) break;
+
       // Append the assistant tool_calls message
       messages.push(responseMessage);
 
@@ -97,6 +100,11 @@ export async function POST(req: NextRequest) {
             toolResult = "No data found for this specific topic.";
           }
 
+          // supabaseService returns null/[] on failure, don't let the model present that as "no information"
+          if (toolResult === 'null' || toolResult === '[]') {
+            return NextResponse.json({ message: FALLBACK_MESSAGE }, { status: 200 });
+          }
+
           // Append tool response
           messages.push({
             tool_call_id: toolCall.id,
@@ -106,28 +114,6 @@ export async function POST(req: NextRequest) {
           });
         }
       }
-
-      // Second API call with tool results
-      response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model,
-          messages,
-          temperature: 0.5,
-          max_tokens: 1200
-        }),
-      });
-
-      if (!response.ok) {
-        return NextResponse.json({ message: FALLBACK_MESSAGE }, { status: 200 });
-      }
-
-      data = await response.json();
-      responseMessage = data?.choices?.[0]?.message;
     }
 
     const finalReply = responseMessage?.content;

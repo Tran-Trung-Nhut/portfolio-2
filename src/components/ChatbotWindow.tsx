@@ -22,9 +22,9 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
     "What are his AI projects and tech stack?",
     "What are his programming skills and frameworks?",
     "Tell me about his research",
-    "What is his university and GPA?",
-    "Does he have any activities or awards?",
-    "Does he have any professional certificates?"
+    "Where does he study?",
+    "What is his work experience?",
+    "How can I contact him?"
   ];
 
   const scrollToBottom = () => {
