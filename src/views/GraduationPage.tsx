@@ -50,12 +50,13 @@ const splitLastWord = (name: string) => {
   return [name.slice(0, index + 1), lastWord];
 };
 
-const GraduationPage = ({ guestName }: GraduationPageProps) => {
+const GraduationPage = ({ invite }: GraduationPageProps) => {
+  const guestName = invite?.name ?? CONFIG.khachMacDinh;
   const [nameHead, nameTail] = splitLastWord(guestName);
 
   return (
     <div className="grad-page" lang="vi">
-      <GraduationGuestbook guestName={guestName === CONFIG.khachMacDinh ? '' : guestName}>
+      <GraduationGuestbook invite={invite}>
         <GraduationWishSky />
         <div className="grad-window">
           <div className="grad-titlebar">

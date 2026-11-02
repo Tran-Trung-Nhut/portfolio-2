@@ -89,6 +89,11 @@ export interface GraduationConfig {
   khachMacDinh: string;
 }
 
+export interface InvitedGuest {
+  token: string;
+  name: string;
+}
+
 export interface GraduationWish {
   name: string;
   wish: string;

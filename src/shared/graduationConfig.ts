@@ -10,8 +10,7 @@ export const GRADUATION_CONFIG: GraduationConfig = {
   khachMacDinh: "Quý khách",
 };
 
-export const GUEST_PARAM = 'khach';
-export const GUEST_NAME_MAX_LENGTH = 60;
+export const INVITE_PARAM = 'invite';
 export const NAME_MAX_LENGTH = 40;
 export const GUEST_INPUT_MAX_LENGTH = 80;
 export const WISH_MAX_LENGTH = 150;

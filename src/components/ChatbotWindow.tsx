@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
-import NeoAsis from '@/components/NeoAsis';
+import { NeoChatHeader, NeoChatLog, NeoChatMascot, NeoChatSend, NeoChatTyping } from '@/components/NeoChat';
 import { fetchChatbotResponse } from '@/services/chatbotService';
 import { FALLBACK_MESSAGE } from '@/shared/constants';
 import { nunito } from '@/shared/fonts';
@@ -38,14 +38,6 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [mood, setMood] = useState<NeoMood>('greet');
-  const logRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const log = logRef.current;
-    if (!log) return;
-    if (messages.length === 0 && !isLoading) log.scrollTop = 0;
-    else log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
-  }, [messages, isLoading, isOpen]);
 
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || !isOnline || isLoading) return;
@@ -76,25 +68,17 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
       aria-label="Chat with Neo Asis"
       inert={!isOpen}
     >
-      <div key={currentMood} className="neo-chat-mascot chatbot-mascot">
-        <NeoAsis mood={currentMood} />
-      </div>
+      <NeoChatMascot mood={currentMood} className="chatbot-mascot" />
 
       <div className="neo-chat-card chatbot-card">
-        <header className="neo-chat-header chatbot-header">
-          <h2 className="neo-chat-name">Neo Asis</h2>
-          <p className="neo-chat-status">
-            <span className="neo-chat-dot" aria-hidden="true" />
-            {isOnline ? STATUS[currentMood] : 'Offline'}
-          </p>
-          <button type="button" className="neo-chat-close" onClick={onClose} aria-label="Close chat">
-            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-            </svg>
-          </button>
-        </header>
+        <NeoChatHeader
+          className="chatbot-header"
+          status={isOnline ? STATUS[currentMood] : 'Offline'}
+          closeLabel="Close chat"
+          onClose={onClose}
+        />
 
-        <div ref={logRef} className="neo-chat-log chatbot-log" role="log" aria-live="polite">
+        <NeoChatLog label="Chat with Neo Asis" scrollKey={`${messages.length}-${isLoading}-${isOpen}`} follow={messages.length > 0 || isLoading}>
           <div className="neo-chat-bubble is-assistant chatbot-markdown">
             {isOnline ? (
               <>
@@ -129,12 +113,8 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
             )
           ))}
 
-          {isLoading && (
-            <div className="neo-chat-bubble is-assistant is-typing" role="status" aria-label="Neo Asis is typing">
-              <span /><span /><span />
-            </div>
-          )}
-        </div>
+          {isLoading && <NeoChatTyping label="Neo Asis is typing" />}
+        </NeoChatLog>
 
         <div className="neo-chat-composer">
           <form className="neo-chat-form" onSubmit={handleSubmit}>
@@ -147,11 +127,7 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
               disabled={!isOnline || isLoading}
               aria-label="Message Neo Asis"
             />
-            <button type="submit" className="neo-chat-send" aria-label="Send" disabled={!isOnline || isLoading || !inputValue.trim()}>
-              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+            <NeoChatSend label="Send" disabled={!isOnline || isLoading || !inputValue.trim()} />
           </form>
         </div>
       </div>

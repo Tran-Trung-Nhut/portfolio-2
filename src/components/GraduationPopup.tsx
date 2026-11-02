@@ -3,27 +3,15 @@
 import { useEffect, useState, type AnimationEvent, type KeyboardEvent } from 'react';
 import Link from 'next/link';
 import { FaArrowRight, FaGraduationCap, FaTimes } from 'react-icons/fa';
+import { readStorage, writeStorage } from '@/shared/utils';
 
 const STORAGE_KEY = 'graduation-popup-dismissed';
 const SHOW_DELAY_MS = 1800;
 
 type PopupStatus = 'hidden' | 'open' | 'closing';
 
-const isDismissed = () => {
-  try {
-    return window.sessionStorage.getItem(STORAGE_KEY) === '1';
-  } catch {
-    return false;
-  }
-};
-
-const rememberDismissed = () => {
-  try {
-    window.sessionStorage.setItem(STORAGE_KEY, '1');
-  } catch {
-    return;
-  }
-};
+const isDismissed = () => readStorage('sessionStorage', STORAGE_KEY) === '1';
+const rememberDismissed = () => writeStorage('sessionStorage', STORAGE_KEY, '1');
 
 const GraduationPopup = () => {
   const [status, setStatus] = useState<PopupStatus>('hidden');
