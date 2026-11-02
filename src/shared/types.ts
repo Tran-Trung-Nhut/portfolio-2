@@ -78,3 +78,13 @@ export interface Stat {
   number: string;
   label: string;
 }
+
+export interface GraduationConfig {
+  gio: string;
+  ngay: string;
+  diaDiem: string;
+  batDau: string;
+  ketThuc: string;
+  mapQuery: string;
+  khachMacDinh: string;
+}

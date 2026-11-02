@@ -25,6 +25,8 @@ export const navItems = [
   { label: "Contact", path: "/contact" },
 ];
 
+export const STANDALONE_PATHS = ["/graduation"];
+
 // ─── ICON & COLOR MAPPING ──────────────────────────────────
 export const TECH_ICON_MAP: Record<string, IconDescriptor> = {
   "TypeScript": { icon: SiTypescript, color: "#3178C6" },

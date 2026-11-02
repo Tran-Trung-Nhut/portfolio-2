@@ -68,3 +68,7 @@ export interface EmailPayload {
   subject: string;
   message: string;
 }
+
+export interface GraduationPageProps {
+  guestName: string;
+}

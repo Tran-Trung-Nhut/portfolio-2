@@ -1,0 +1,109 @@
+import { GRADUATION_CONFIG as CONFIG } from '@/shared/graduationConfig';
+import { GraduationPageProps } from '@/shared/interfaces';
+
+const EVENT_TITLE = 'Lễ Tốt nghiệp – Trần Trung Nhựt';
+const EVENT_DETAILS = 'Lễ Tốt nghiệp Cử nhân Khoa học Máy tính của Trần Trung Nhựt.';
+
+const MAP_LINK = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapQuery);
+const MAP_EMBED = 'https://maps.google.com/maps?hl=vi&z=17&output=embed&q=' + encodeURIComponent(CONFIG.mapQuery);
+
+const toGCalDate = (iso: string) => {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+};
+
+const buildCalendarUrl = () => {
+  if (!CONFIG.batDau || !CONFIG.ketThuc) return null;
+  const start = toGCalDate(CONFIG.batDau);
+  const end = toGCalDate(CONFIG.ketThuc);
+  if (!start || !end) return null;
+
+  const url = new URL('https://calendar.google.com/calendar/render');
+  url.searchParams.set('action', 'TEMPLATE');
+  url.searchParams.set('text', EVENT_TITLE);
+  url.searchParams.set('dates', `${start}/${end}`);
+  url.searchParams.set('location', CONFIG.mapQuery);
+  url.searchParams.set('details', EVENT_DETAILS);
+  return url.toString();
+};
+
+const CALENDAR_URL = buildCalendarUrl();
+
+const GraduationPage = ({ guestName }: GraduationPageProps) => {
+  return (
+    <div className="grad-page" lang="vi">
+      <div className="grad-window">
+        <div className="grad-titlebar">
+          <div className="grad-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+          <span className="grad-filename">thiep_moi.ts</span>
+          <span className="grad-tag">BÁCH KHOA · KHMT</span>
+        </div>
+
+        <div className="grad-code" aria-hidden="true">
+          <span className="grad-ln"><span className="grad-c">{'// TRƯỜNG ĐẠI HỌC BÁCH KHOA – ĐHQG-HCM'}</span></span>
+          <span className="grad-ln">{' '}</span>
+          <span className="grad-ln"><span className="grad-k">const</span>{' khachMoi = '}<span className="grad-s">&quot;{guestName}&quot;</span>;</span>
+          <span className="grad-ln">{' '}</span>
+          <span className="grad-ln"><span className="grad-k">await</span>{' moiDuLe(khachMoi, {'}</span>
+          <span className="grad-ln">{'  su_kien:     '}<span className="grad-s">&quot;Lễ Tốt nghiệp&quot;</span>,</span>
+          <span className="grad-ln">{'  tan_cu_nhan: '}<span className="grad-s">&quot;Trần Trung Nhựt&quot;</span>,</span>
+          <span className="grad-ln">{'  nganh:       '}<span className="grad-s">&quot;Khoa học Máy tính&quot;</span>,</span>
+          <span className="grad-ln">{'  thoi_gian:   '}<span className="grad-s">&quot;{CONFIG.gio} · {CONFIG.ngay}&quot;</span>,</span>
+          <span className="grad-ln">{'  dia_diem:    '}<span className="grad-s">&quot;{CONFIG.diaDiem}&quot;</span>,</span>
+          <span className="grad-ln">{'});'}</span>
+          <span className="grad-ln">{' '}</span>
+          <span className="grad-ln"><span className="grad-c">{'// Rất hân hạnh được đón tiếp!'}</span></span>
+        </div>
+
+        <main className="grad-output">
+          <p className="grad-prompt grad-reveal" aria-hidden="true"><b>$</b> npm run tot-nghiep</p>
+          <p className="grad-lead grad-reveal grad-d1">Trân trọng kính mời</p>
+          <div className="grad-guest grad-reveal grad-d2">
+            <h1>{guestName}<span className="grad-cursor" aria-hidden="true"></span></h1>
+          </div>
+          <p className="grad-desc grad-reveal grad-d3">
+            đến dự Lễ Tốt nghiệp của <strong className="grad-nowrap">Trần Trung Nhựt</strong> – Cử nhân Khoa học Máy tính,
+            Trường Đại học Bách khoa – <span className="grad-nowrap">ĐHQG-HCM</span>.
+          </p>
+
+          <dl className="grad-details grad-reveal grad-d4">
+            <div>
+              <dt>THỜI GIAN</dt>
+              <dd>{CONFIG.gio}<small>{CONFIG.ngay}</small></dd>
+            </div>
+            <div>
+              <dt>ĐỊA ĐIỂM</dt>
+              <dd>{CONFIG.diaDiem}<small>Trường ĐH Bách khoa – ĐHQG-HCM</small></dd>
+            </div>
+          </dl>
+
+          <div className="grad-map grad-reveal grad-d5">
+            <iframe
+              src={MAP_EMBED}
+              title={`Bản đồ: ${CONFIG.mapQuery}`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
+
+          <div className="grad-actions grad-reveal grad-d6">
+            <a className="grad-btn grad-btn-primary" href={MAP_LINK} target="_blank" rel="noopener noreferrer">
+              Mở Google Maps
+            </a>
+            {CALENDAR_URL && (
+              <a className="grad-btn" href={CALENDAR_URL} target="_blank" rel="noopener noreferrer">
+                Thêm vào Google Calendar
+              </a>
+            )}
+          </div>
+
+          <p className="grad-signoff grad-reveal grad-d7">{'// Rất hân hạnh được đón tiếp!'}</p>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default GraduationPage;
