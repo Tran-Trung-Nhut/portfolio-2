@@ -1,7 +1,9 @@
-import { ChatMessage } from "@/shared/interfaces";
-import { FALLBACK_MESSAGE } from "@/shared/constants";
+import { ChatMessage, ChatbotReply } from "@/shared/interfaces";
+import { CHATBOT_MOODS, FALLBACK_MESSAGE } from "@/shared/constants";
 
-export const fetchChatbotResponse = async (userQuery: string, history: ChatMessage[]): Promise<string> => {
+const FALLBACK_REPLY: ChatbotReply = { message: FALLBACK_MESSAGE, mood: 'sorry' };
+
+export const fetchChatbotResponse = async (userQuery: string, history: ChatMessage[]): Promise<ChatbotReply> => {
   try {
     const response = await fetch('/api/chatbot', {
       method: 'POST',
@@ -22,10 +24,11 @@ export const fetchChatbotResponse = async (userQuery: string, history: ChatMessa
     if (typeof data?.message !== 'string' || data.message.length === 0) {
       throw new Error('Invalid chatbot response payload.');
     }
+    if (data.message === FALLBACK_MESSAGE) return FALLBACK_REPLY;
 
-    return data.message;
+    return { message: data.message, mood: CHATBOT_MOODS.find((mood) => mood === data.mood) ?? 'answer' };
   } catch (error) {
     console.error('Chatbot Service Error:', error);
-    return FALLBACK_MESSAGE;
+    return FALLBACK_REPLY;
   }
 };
