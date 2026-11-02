@@ -2,6 +2,7 @@ import { GRADUATION_CONFIG as CONFIG } from '@/shared/graduationConfig';
 import { GraduationPageProps } from '@/shared/interfaces';
 import GraduationCountdown from '@/components/GraduationCountdown';
 import GraduationGuestbook, { JoinButton } from '@/components/GraduationGuestbook';
+import GraduationWishSky from '@/components/GraduationWishSky';
 import GraduationWishWall from '@/components/GraduationWishWall';
 
 const EVENT_TITLE = 'Lễ Tốt nghiệp – Trần Trung Nhựt';
@@ -55,6 +56,7 @@ const GraduationPage = ({ guestName }: GraduationPageProps) => {
   return (
     <div className="grad-page" lang="vi">
       <GraduationGuestbook guestName={guestName === CONFIG.khachMacDinh ? '' : guestName}>
+        <GraduationWishSky />
         <div className="grad-window">
           <div className="grad-titlebar">
             <div className="grad-dots" aria-hidden="true"><span></span><span></span><span></span></div>

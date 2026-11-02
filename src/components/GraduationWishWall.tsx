@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type CSSProperties } from 'react';
 import { JoinButton, useGuestbook } from '@/components/GraduationGuestbook';
-import { GraduationWish } from '@/shared/types';
 
 const LAYOUTS = [
   { query: '(min-width: 960px)', columns: 4, rows: 2 },
@@ -37,9 +36,9 @@ const createSlot = (wishIndex: number, cell: number): Slot => ({
   } as CSSProperties,
 });
 
-const pickHiddenWish = (slots: Slot[], wishes: GraduationWish[]) => {
+const pickHiddenWish = (slots: Slot[], pool: number[]) => {
   const shown = new Set(slots.map((slot) => slot.wishIndex));
-  return pick(wishes.map((_, index) => index).filter((index) => !shown.has(index)));
+  return pick(pool.filter((wishIndex) => !shown.has(wishIndex)));
 };
 
 const useLayout = () => {
@@ -56,7 +55,7 @@ const useLayout = () => {
 };
 
 const GraduationWishWall = () => {
-  const { wishes } = useGuestbook();
+  const { wishes, wallPool } = useGuestbook();
   const { columns, rows } = useLayout();
   const capacity = columns * rows;
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -64,11 +63,11 @@ const GraduationWishWall = () => {
 
   useEffect(() => {
     const cells = shuffle(Array.from({ length: capacity }, (_, cell) => cell));
-    setSlots((wishes ?? []).slice(0, capacity).map((_, index) => createSlot(index, cells[index])));
-  }, [wishes, capacity]);
+    setSlots(wallPool.slice(0, capacity).map((wishIndex, index) => createSlot(wishIndex, cells[index])));
+  }, [wallPool, capacity]);
 
   useEffect(() => {
-    if (!wishes || paused || wishes.length <= capacity) return;
+    if (!wishes || paused || wallPool.length <= capacity) return;
 
     const firstSwappable = wishes[0].mine ? 1 : 0;
     let fadeTimer: ReturnType<typeof setTimeout>;
@@ -78,7 +77,7 @@ const GraduationWishWall = () => {
       setSlots((current) => current.map((slot, index) => (index === target ? { ...slot, leaving: true } : slot)));
       fadeTimer = setTimeout(() => {
         setSlots((current) =>
-          current.map((slot, index) => (index === target ? createSlot(pickHiddenWish(current, wishes), slot.cell) : slot))
+          current.map((slot, index) => (index === target ? createSlot(pickHiddenWish(current, wallPool), slot.cell) : slot))
         );
       }, FADE_MS);
     }, SWAP_EVERY_MS);
@@ -87,7 +86,7 @@ const GraduationWishWall = () => {
       clearInterval(swapTimer);
       clearTimeout(fadeTimer);
     };
-  }, [wishes, capacity, paused]);
+  }, [wishes, wallPool, capacity, paused]);
 
   return (
     <section id="loi-chuc" className="grad-window grad-wall" aria-label="Lời chúc gửi Nhựt">

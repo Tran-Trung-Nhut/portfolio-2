@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import GraduationJoinDialog from '@/components/GraduationJoinDialog';
 import { fetchWishes } from '@/services/graduationService';
 import { GraduationGuestbookProps } from '@/shared/interfaces';
@@ -8,8 +8,12 @@ import { GraduationWish } from '@/shared/types';
 
 interface GuestbookContextValue {
   wishes: GraduationWish[] | null;
+  skyPool: number[];
+  wallPool: number[];
   openJoin: () => void;
 }
+
+const SKY_QUERY = '(min-width: 1600px) and (prefers-reduced-motion: no-preference)';
 
 const GuestbookContext = createContext<GuestbookContextValue | null>(null);
 
@@ -31,10 +35,28 @@ export const JoinButton = () => {
 const GraduationGuestbook = ({ guestName, children }: GraduationGuestbookProps) => {
   const [wishes, setWishes] = useState<GraduationWish[] | null>(null);
   const [joinOpen, setJoinOpen] = useState(false);
+  const [skyActive, setSkyActive] = useState(false);
 
   useEffect(() => {
     fetchWishes().then((loaded) => setWishes((current) => [...(current ?? []), ...loaded]));
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia(SKY_QUERY);
+    const update = () => setSkyActive(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  const { skyPool, wallPool } = useMemo(() => {
+    const all = (wishes ?? []).map((_, index) => index);
+    if (!skyActive) return { skyPool: [], wallPool: all };
+    return {
+      skyPool: all.filter((index) => index % 2 === 1),
+      wallPool: all.filter((index) => index % 2 === 0),
+    };
+  }, [wishes, skyActive]);
 
   const openJoin = useCallback(() => setJoinOpen(true), []);
   const closeJoin = useCallback(() => setJoinOpen(false), []);
@@ -43,7 +65,7 @@ const GraduationGuestbook = ({ guestName, children }: GraduationGuestbookProps) 
   }, []);
 
   return (
-    <GuestbookContext.Provider value={{ wishes, openJoin }}>
+    <GuestbookContext.Provider value={{ wishes, skyPool, wallPool, openJoin }}>
       {children}
       <GraduationJoinDialog open={joinOpen} guestName={guestName} onClose={closeJoin} onWish={addWish} />
     </GuestbookContext.Provider>

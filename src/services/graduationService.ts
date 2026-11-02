@@ -1,5 +1,5 @@
 import { GuestResponsePayload } from '@/shared/interfaces';
-import { GraduationWish } from '@/shared/types';
+import { GraduationWish, GuestNameReview } from '@/shared/types';
 
 const postJson = (url: string, body: object) =>
   fetch(url, {
@@ -8,11 +8,11 @@ const postJson = (url: string, body: object) =>
     body: JSON.stringify(body),
   });
 
-export const checkGuestName = async (name: string) => {
+export const checkGuestName = async (name: string): Promise<GuestNameReview> => {
   const response = await postJson('/api/graduation/name', { name });
   if (!response.ok) throw new Error('NAME_CHECK_FAILED');
   const data = await response.json();
-  return data?.valid === true;
+  return { valid: data?.valid === true, reply: typeof data?.reply === 'string' ? data.reply : '' };
 };
 
 export const sendGuestResponse = async (payload: GuestResponsePayload) => {
