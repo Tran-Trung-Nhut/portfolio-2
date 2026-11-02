@@ -2,15 +2,15 @@ import { Metadata } from 'next';
 import GraduationPage from '@/views/GraduationPage';
 import { GRADUATION_CONFIG, GUEST_PARAM, GUEST_NAME_MAX_LENGTH } from '@/shared/graduationConfig';
 
-const TITLE = 'Thư mời Lễ Tốt nghiệp – Trần Trung Nhựt';
+const OG_TITLE = 'Thư mời Lễ Tốt nghiệp – Trần Trung Nhựt';
 
 export const metadata: Metadata = {
-  title: TITLE,
+  title: 'Graduation',
   description: 'Trân trọng kính mời bạn đến dự Lễ Tốt nghiệp của Trần Trung Nhựt – Cử nhân Khoa học Máy tính, Trường Đại học Bách khoa – ĐHQG-HCM.',
   robots: { index: false, follow: false },
   alternates: { canonical: '/graduation' },
   openGraph: {
-    title: TITLE,
+    title: OG_TITLE,
     description: 'Trân trọng kính mời bạn đến dự Lễ Tốt nghiệp của Trần Trung Nhựt – Cử nhân Khoa học Máy tính, ĐH Bách khoa – ĐHQG-HCM.',
     type: 'website',
     url: '/graduation',

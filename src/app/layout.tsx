@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ChatbotButton from '@/components/ChatbotButton';
 import SiteChrome from '@/components/SiteChrome';
+import GraduationPopup from '@/components/GraduationPopup';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.trantrungnhut.id.vn'),
@@ -70,6 +71,7 @@ export default function RootLayout({
           <SiteChrome>
             <Footer />
             <ChatbotButton />
+            <GraduationPopup />
           </SiteChrome>
         </div>
       </body>
