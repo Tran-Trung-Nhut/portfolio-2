@@ -1,5 +1,6 @@
 import { GRADUATION_CONFIG as CONFIG } from '@/shared/graduationConfig';
 import { GraduationPageProps } from '@/shared/interfaces';
+import GraduationCountdown from '@/components/GraduationCountdown';
 
 const EVENT_TITLE = 'Lễ Tốt nghiệp – Trần Trung Nhựt';
 const EVENT_DETAILS = 'Lễ Tốt nghiệp Cử nhân Khoa học Máy tính của Trần Trung Nhựt.';
@@ -7,10 +8,16 @@ const EVENT_DETAILS = 'Lễ Tốt nghiệp Cử nhân Khoa học Máy tính củ
 const MAP_LINK = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapQuery);
 const MAP_EMBED = 'https://maps.google.com/maps?hl=vi&z=17&output=embed&q=' + encodeURIComponent(CONFIG.mapQuery);
 
+const parseTime = (iso: string) => {
+  if (!iso) return null;
+  const time = new Date(iso).getTime();
+  return Number.isNaN(time) ? null : time;
+};
+
 const toGCalDate = (iso: string) => {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const time = parseTime(iso);
+  if (time === null) return null;
+  return new Date(time).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 };
 
 const buildCalendarUrl = () => {
@@ -29,6 +36,10 @@ const buildCalendarUrl = () => {
 };
 
 const CALENDAR_URL = buildCalendarUrl();
+
+const START_TIME = parseTime(CONFIG.batDau);
+const END_TIME = parseTime(CONFIG.ketThuc);
+const COUNTDOWN_END = START_TIME !== null && END_TIME !== null && END_TIME > START_TIME ? END_TIME : START_TIME;
 
 const splitLastWord = (name: string) => {
   const index = name.lastIndexOf(' ');
@@ -94,10 +105,19 @@ const GraduationPage = ({ guestName }: GraduationPageProps) => {
                   <dd>{CONFIG.diaDiem}<small>Trường ĐH Bách khoa – <span className="grad-nowrap">ĐHQG-HCM</span></small></dd>
                 </div>
               </dl>
+
+              {START_TIME !== null && COUNTDOWN_END !== null && (
+                <GraduationCountdown
+                  start={START_TIME}
+                  end={COUNTDOWN_END}
+                  initialNow={Date.now()}
+                  className="grad-reveal grad-d5"
+                />
+              )}
             </div>
 
             <div className="grad-footer">
-              <div className="grad-actions grad-reveal grad-d6">
+              <div className="grad-actions grad-reveal grad-d7">
                 <a className="grad-btn grad-btn-primary" href={MAP_LINK} target="_blank" rel="noopener noreferrer">
                   Mở Google Maps
                 </a>
@@ -108,12 +128,12 @@ const GraduationPage = ({ guestName }: GraduationPageProps) => {
                 )}
               </div>
 
-              <p className="grad-signoff grad-reveal grad-d7">{'// Rất hân hạnh được đón tiếp!'}</p>
+              <p className="grad-signoff grad-reveal grad-d8">{'// Rất hân hạnh được đón tiếp!'}</p>
             </div>
           </div>
 
           <div className="grad-map-pane">
-            <div className="grad-map grad-reveal grad-d5">
+            <div className="grad-map grad-reveal grad-d6">
               <iframe
                 src={MAP_EMBED}
                 title={`Bản đồ: ${CONFIG.mapQuery}`}
