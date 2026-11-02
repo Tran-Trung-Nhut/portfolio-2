@@ -72,3 +72,10 @@ export interface EmailPayload {
 export interface GraduationPageProps {
   guestName: string;
 }
+
+export interface GraduationCountdownProps {
+  start: number;
+  end: number;
+  initialNow: number;
+  className?: string;
+}
