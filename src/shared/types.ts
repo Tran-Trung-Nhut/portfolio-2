@@ -95,7 +95,7 @@ export interface GraduationWish {
   mine?: boolean;
 }
 
-export interface GuestNameReview {
+export interface GuestReview {
   valid: boolean;
   reply: string;
 }

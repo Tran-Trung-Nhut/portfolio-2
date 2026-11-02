@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent, type MouseEvent } from 'react';
 import NeoAsis from '@/components/NeoAsis';
 import { checkGuestName, sendGuestResponse } from '@/services/graduationService';
-import { GRADUATION_CONFIG as CONFIG, NAME_MAX_LENGTH, WISH_MAX_LENGTH } from '@/shared/graduationConfig';
+import { GRADUATION_CONFIG as CONFIG, GUEST_INPUT_MAX_LENGTH, WISH_MAX_LENGTH } from '@/shared/graduationConfig';
 import { GraduationJoinDialogProps } from '@/shared/interfaces';
 import { nunito } from '@/shared/fonts';
 import { NeoChatLine, NeoMood } from '@/shared/types';
@@ -30,13 +30,19 @@ const NAME_ERRORS = [
   'Xì… tên gì kỳ cục vậy. Nghiêm túc lại giùm tui cái!',
 ];
 
+const WISH_NUDGES = [
+  'Ê, chúc cho đàng hoàng coi! Viết lại lời chúc tử tế giúp tui nha.',
+  'Lời chúc gì kỳ vậy? Nhựt sắp tốt nghiệp đó, chúc cho dễ thương chút đi!',
+  'Hông được đâu nha. Viết lại một lời chúc tử tế hơn giùm tui!',
+];
+
 const NETWORK_ERROR = 'Ui, kết nối đang trục trặc rồi. Bạn thử lại giúp tui nhé!';
 
 const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const pickNameError = (previous: string) => {
-  const options = NAME_ERRORS.filter((message) => message !== previous);
+const pickFallback = (messages: string[], previous: string) => {
+  const options = messages.filter((message) => message !== previous);
   return options[Math.floor(Math.random() * options.length)];
 };
 
@@ -127,13 +133,15 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
     }
   };
 
+  const lastAssistantLine = () => [...lines].reverse().find((line) => line.from === 'assistant')?.text ?? '';
+
   const submitName = async (e: FormEvent) => {
     e.preventDefault();
     const value = normalize(draft);
     if (!value || typing) return;
 
     const current = session.current;
-    const previous = [...lines].reverse().find((line) => line.from === 'assistant')?.text ?? '';
+    const previous = lastAssistantLine();
     addLines('user', [value]);
     setDraft('');
     setMood('think');
@@ -149,7 +157,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
           'happy'
         );
       } else {
-        await assistantSays([review.reply || pickNameError(previous)], 'smug');
+        await assistantSays([review.reply || pickFallback(NAME_ERRORS, previous)], 'smug');
       }
     } catch {
       await assistantSays([NETWORK_ERROR], 'sorry');
@@ -178,12 +186,18 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
   const send = async (text: string) => {
     if (typing) return;
     const current = session.current;
+    const previous = lastAssistantLine();
     addLines('user', [text || 'Thôi, để dịp khác nha.']);
-    setMood('answer');
+    setMood('think');
     setTyping(true);
     try {
-      await sendGuestResponse({ name, attending, wish: text });
+      const result = await sendGuestResponse({ name, attending, wish: text });
       if (current !== session.current) return;
+      if (!result.valid) {
+        setDraft('');
+        await assistantSays([result.reply || pickFallback(WISH_NUDGES, previous)], 'smug');
+        return;
+      }
       saveName(name);
       if (text) onWish({ name, wish: text });
       setSentWish(Boolean(text));
@@ -258,7 +272,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
                   className="neo-chat-field"
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
-                  maxLength={NAME_MAX_LENGTH}
+                  maxLength={GUEST_INPUT_MAX_LENGTH}
                   placeholder="Nhập tên của bạn…"
                   autoComplete="name"
                   aria-label="Tên của bạn"

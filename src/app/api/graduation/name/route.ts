@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { normalizeName, reviewGuestName } from '@/lib/guestName';
+import { normalizeName, reviewGuestName } from '@/lib/guestReview';
 import { GuestResponseBody } from '@/shared/interfaces';
 
 export async function POST(req: NextRequest) {
