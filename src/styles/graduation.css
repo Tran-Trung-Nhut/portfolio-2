@@ -100,10 +100,32 @@
 .grad-k { color: var(--grad-keyword); }
 .grad-s { color: var(--grad-string); }
 
+.grad-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.grad-run {
+  display: contents;
+}
+
 .grad-output {
-  padding: 28px 32px 36px;
+  order: 1;
+  padding: 28px 32px 0;
   background: var(--grad-panel-2);
   border-top: 1px solid var(--grad-border);
+}
+
+.grad-map-pane {
+  order: 2;
+  padding: 24px 32px 0;
+  background: var(--grad-panel-2);
+}
+
+.grad-footer {
+  order: 3;
+  padding: 20px 32px 36px;
+  background: var(--grad-panel-2);
 }
 
 .grad-prompt {
@@ -198,7 +220,6 @@
 }
 
 .grad-map {
-  margin-top: 24px;
   aspect-ratio: 16 / 7;
   border: 1px solid var(--grad-border);
   border-radius: var(--radius-md);
@@ -218,7 +239,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 20px;
 }
 
 .grad-btn {
@@ -308,7 +328,15 @@
   }
 
   .grad-output {
-    padding: 24px 20px 28px;
+    padding: 24px 20px 0;
+  }
+
+  .grad-map-pane {
+    padding: 22px 20px 0;
+  }
+
+  .grad-footer {
+    padding: 20px 20px 28px;
   }
 
   .grad-details {
@@ -317,5 +345,74 @@
 
   .grad-map {
     aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 960px) {
+  .grad-page {
+    padding: 40px 32px;
+  }
+
+  .grad-window {
+    max-width: 1140px;
+  }
+
+  .grad-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "code run"
+      "map  run";
+  }
+
+  .grad-run {
+    grid-area: run;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 36px 44px;
+    background: var(--grad-panel-2);
+    border-left: 1px solid var(--grad-border);
+  }
+
+  .grad-code {
+    grid-area: code;
+    padding: 26px 24px 18px 4px;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  .grad-map-pane {
+    grid-area: map;
+    display: flex;
+    padding: 6px 24px 24px;
+    background: var(--grad-panel);
+  }
+
+  .grad-map {
+    flex: 1;
+    min-height: 200px;
+    aspect-ratio: auto;
+  }
+
+  .grad-output {
+    padding: 0;
+    background: none;
+    border-top: 0;
+  }
+
+  .grad-footer {
+    padding: 26px 0 0;
+    background: none;
+  }
+
+  .grad-guest h1 {
+    font-size: clamp(38px, 3.3vw, 50px);
+  }
+
+  .grad-lead,
+  .grad-desc {
+    font-size: 19px;
   }
 }
