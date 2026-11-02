@@ -343,6 +343,91 @@ html:has(.grad-join[open]) {
   }
 }
 
+.grad-sky {
+  display: none;
+}
+
+@keyframes gradRise {
+  0% {
+    transform: translate3d(0, 100vh, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(var(--sway), 35vh, 0);
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(0, -30vh, 0);
+    opacity: 0;
+  }
+}
+
+@media (min-width: 1600px) and (prefers-reduced-motion: no-preference) {
+  .grad-sky {
+    --gutter: calc((100vw - 1140px) / 2);
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .grad-sky-wish {
+    --width: min(240px, calc(var(--gutter) - 48px));
+    position: absolute;
+    top: 0;
+    width: var(--width);
+    padding: 12px 14px;
+    border: 1px solid rgba(59, 130, 246, 0.22);
+    border-radius: 14px;
+    background: rgba(21, 24, 51, 0.72);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    animation-name: gradRise;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .grad-sky-wish.is-left {
+    left: calc(24px + (var(--gutter) - 48px - var(--width)) * var(--lane));
+  }
+
+  .grad-sky-wish.is-right {
+    right: calc(24px + (var(--gutter) - 48px - var(--width)) * var(--lane));
+  }
+
+  .grad-sky-wish.is-mine {
+    border-color: rgba(34, 211, 238, 0.5);
+  }
+
+  .grad-sky-wish blockquote {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--grad-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .grad-sky-wish figcaption {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--grad-keyword);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .grad-join[open],
   .grad-join[open]::backdrop,

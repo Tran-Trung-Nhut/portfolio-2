@@ -9,8 +9,17 @@ import { GraduationJoinDialogProps } from '@/shared/interfaces';
 type Step = 'name' | 'rsvp' | 'wish' | 'done';
 
 const SAVED_NAME_KEY = 'graduation-guest-name';
-const NAME_ERROR = 'Bạn phải nhập tên của mình tui mới biết bạn là ai được chứ!';
+const NAME_ERRORS = [
+  'Bạn phải nhập tên của mình tui mới biết bạn là ai được chứ!',
+  'Hmm, tên gì lạ vậy ta? Cho tui biết tên thật của bạn nha!',
+  'Tui chưa nhận ra bạn rồi, gõ tên của bạn giúp tui nhé!',
+];
 const NETWORK_ERROR = 'Kết nối đang trục trặc, bạn thử lại giúp tui nhé.';
+
+const pickNameError = (previous: string) => {
+  const options = NAME_ERRORS.filter((message) => message !== previous);
+  return options[Math.floor(Math.random() * options.length)];
+};
 
 const readSavedName = () => {
   try {
@@ -32,6 +41,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [step, setStep] = useState<Step>('name');
   const [name, setName] = useState('');
+  const [greeting, setGreeting] = useState('');
   const [attending, setAttending] = useState(true);
   const [wish, setWish] = useState('');
   const [sentWish, setSentWish] = useState(false);
@@ -62,16 +72,19 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
   const submitName = async (e: FormEvent) => {
     e.preventDefault();
     const value = name.replace(/\s+/g, ' ').trim();
-    if (!value) return setError(NAME_ERROR);
+    const previousError = error;
+    if (!value) return setError(pickNameError(previousError));
 
     setBusy(true);
     setError('');
     try {
-      if (await checkGuestName(value)) {
+      const review = await checkGuestName(value);
+      if (review.valid) {
         setName(value);
+        setGreeting(review.reply);
         setStep('rsvp');
       } else {
-        setError(NAME_ERROR);
+        setError(review.reply || pickNameError(previousError));
       }
     } catch {
       setError(NETWORK_ERROR);
@@ -161,7 +174,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
           {step === 'rsvp' && (
             <>
               <p className="grad-join-prompt" aria-hidden="true"><b>$</b> rsvp</p>
-              <h2 id="grad-join-title" className="grad-join-title">Chào {name}!</h2>
+              <h2 id="grad-join-title" className="grad-join-title">{greeting || `Chào ${name}!`}</h2>
               <p className="grad-join-text">
                 Bạn sẽ tới chung vui cùng Nhựt lúc {CONFIG.gio}, {CONFIG.ngay} chứ?
               </p>

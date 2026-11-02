@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { appendRow, hasSheetsConfig, readRows } from '@/lib/googleSheets';
-import { isGuestName, normalizeName } from '@/lib/guestName';
+import { isNameShaped, normalizeName } from '@/lib/guestName';
 import { WISH_MAX_LENGTH } from '@/shared/graduationConfig';
 import { GuestResponseBody } from '@/shared/interfaces';
 import { GraduationWish } from '@/shared/types';
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     if (typeof body?.attending !== 'boolean' || Array.from(wish).length > WISH_MAX_LENGTH) {
       return NextResponse.json({ error: 'INVALID_PAYLOAD' }, { status: 400 });
     }
-    if (!(await isGuestName(name))) {
+    if (!isNameShaped(name)) {
       return NextResponse.json({ error: 'INVALID_NAME' }, { status: 400 });
     }
     if (!hasSheetsConfig) {
