@@ -99,3 +99,10 @@ export interface GuestNameReview {
   valid: boolean;
   reply: string;
 }
+
+export type MochiMood = 'greet' | 'think' | 'answer' | 'happy' | 'sorry' | 'smug';
+
+export interface MochiLine {
+  from: 'mochi' | 'guest';
+  text: string;
+}
