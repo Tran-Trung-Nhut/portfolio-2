@@ -32,7 +32,7 @@ export const JoinButton = () => {
   );
 };
 
-const GraduationGuestbook = ({ guestName, children }: GraduationGuestbookProps) => {
+const GraduationGuestbook = ({ invite, children }: GraduationGuestbookProps) => {
   const [wishes, setWishes] = useState<GraduationWish[] | null>(null);
   const [joinOpen, setJoinOpen] = useState(false);
   const [skyActive, setSkyActive] = useState(false);
@@ -67,7 +67,7 @@ const GraduationGuestbook = ({ guestName, children }: GraduationGuestbookProps) 
   return (
     <GuestbookContext.Provider value={{ wishes, skyPool, wallPool, openJoin }}>
       {children}
-      <GraduationJoinDialog open={joinOpen} guestName={guestName} onClose={closeJoin} onWish={addWish} />
+      <GraduationJoinDialog open={joinOpen} invite={invite} onClose={closeJoin} onWish={addWish} />
     </GuestbookContext.Provider>
   );
 };

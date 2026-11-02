@@ -11,6 +11,7 @@ const VALUES_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/va
 export const hasSheetsConfig = Boolean(SHEET_ID && CLIENT_EMAIL && PRIVATE_KEY);
 
 let cachedToken = { value: '', expiresAt: 0 };
+const cachedRows = new Map<string, { rows: string[][]; expiresAt: number }>();
 
 const toBase64Url = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url');
 
@@ -55,9 +56,14 @@ const callSheets = async (path: string, init: RequestInit = {}) => {
   return response.json();
 };
 
-export const readRows = async (range: string): Promise<string[][]> => {
+export const readRows = async (range: string, cacheMs = 0): Promise<string[][]> => {
+  const cached = cachedRows.get(range);
+  if (cached && cached.expiresAt > Date.now()) return cached.rows;
+
   const data = await callSheets(encodeURIComponent(range));
-  return data.values ?? [];
+  const rows: string[][] = data.values ?? [];
+  if (cacheMs) cachedRows.set(range, { rows, expiresAt: Date.now() + cacheMs });
+  return rows;
 };
 
 export const appendRow = async (range: string, row: string[]) => {
@@ -65,4 +71,5 @@ export const appendRow = async (range: string, row: string[]) => {
     method: 'POST',
     body: JSON.stringify({ values: [row] }),
   });
+  cachedRows.clear();
 };

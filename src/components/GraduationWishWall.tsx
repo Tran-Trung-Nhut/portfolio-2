@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type CSSProperties } from 'react';
 import { JoinButton, useGuestbook } from '@/components/GraduationGuestbook';
+import { pickRandom } from '@/shared/utils';
 
 const LAYOUTS = [
   { query: '(min-width: 960px)', columns: 4, rows: 2 },
@@ -18,7 +19,6 @@ interface Slot {
   leaving: boolean;
 }
 
-const pick = <T,>(items: T[]) => items[Math.floor(Math.random() * items.length)];
 const between = (min: number, max: number) => (min + Math.random() * (max - min)).toFixed(1);
 const shuffle = <T,>(items: T[]) => [...items].sort(() => Math.random() - 0.5);
 
@@ -27,8 +27,8 @@ const createSlot = (wishIndex: number, cell: number): Slot => ({
   cell,
   leaving: false,
   style: {
-    justifySelf: pick(['start', 'center', 'end']),
-    alignSelf: pick(['start', 'center', 'end']),
+    justifySelf: pickRandom(['start', 'center', 'end']),
+    alignSelf: pickRandom(['start', 'center', 'end']),
     '--tilt': `${between(-2.5, 2.5)}deg`,
     '--dx': `${between(-14, 14)}px`,
     '--dy': `${between(-12, 12)}px`,
@@ -38,7 +38,7 @@ const createSlot = (wishIndex: number, cell: number): Slot => ({
 
 const pickHiddenWish = (slots: Slot[], pool: number[]) => {
   const shown = new Set(slots.map((slot) => slot.wishIndex));
-  return pick(pool.filter((wishIndex) => !shown.has(wishIndex)));
+  return pickRandom(pool.filter((wishIndex) => !shown.has(wishIndex)));
 };
 
 const useLayout = () => {

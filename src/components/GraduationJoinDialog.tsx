@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent, type MouseEvent } from 'react';
-import NeoAsis from '@/components/NeoAsis';
+import { NeoChatHeader, NeoChatLog, NeoChatMascot, NeoChatSend, NeoChatTyping } from '@/components/NeoChat';
 import { checkGuestName, sendGuestResponse } from '@/services/graduationService';
+import { nunito } from '@/shared/fonts';
 import { GRADUATION_CONFIG as CONFIG, GUEST_INPUT_MAX_LENGTH, WISH_MAX_LENGTH } from '@/shared/graduationConfig';
 import { GraduationJoinDialogProps } from '@/shared/interfaces';
-import { nunito } from '@/shared/fonts';
 import { NeoChatLine, NeoMood } from '@/shared/types';
+import { cleanText, pickRandom, readStorage, writeStorage } from '@/shared/utils';
 
 type Step = 'name' | 'rsvp' | 'wish' | 'done';
 
@@ -24,6 +25,12 @@ const STATUS: Record<NeoMood, string> = {
 
 const INTRO = ['Chào bạn! Tui là Neo Asis, trợ lý của Nhựt nè.', 'Trước khi vào tiệc, cho tui hỏi: bạn là ai vậy?'];
 
+const INVITE_GREETINGS = [
+  'Ồ, {name} tới rồi! Tui là Neo Asis, Nhựt dặn tui đón bạn tận cửa luôn đó.',
+  'Chào {name}! Tui là Neo Asis, bạn là khách mời đặc biệt của Nhựt nè.',
+  'A, {name}! Tui là Neo Asis, trợ lý của Nhựt. Nhựt mong bạn lắm luôn.',
+];
+
 const NAME_ERRORS = [
   'Hứ, cái đó mà là tên hả? Nhập tên thật đi, tui mới biết bạn là ai chứ!',
   'Tui là rồng chứ đâu phải thầy bói. Tên thật của bạn đâu?',
@@ -36,43 +43,14 @@ const WISH_NUDGES = [
   'Hông được đâu nha. Viết lại một lời chúc tử tế hơn giùm tui!',
 ];
 
+const ASK_ATTENDANCE = `Bạn có tới chung vui cùng Nhựt lúc ${CONFIG.gio}, ${CONFIG.ngay} không?`;
 const NETWORK_ERROR = 'Ui, kết nối đang trục trặc rồi. Bạn thử lại giúp tui nhé!';
 
-const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const pickOther = (messages: string[], previous: string) => pickRandom(messages.filter((message) => message !== previous));
 
-const pickFallback = (messages: string[], previous: string) => {
-  const options = messages.filter((message) => message !== previous);
-  return options[Math.floor(Math.random() * options.length)];
-};
-
-const readSavedName = () => {
-  try {
-    return window.localStorage.getItem(SAVED_NAME_KEY) || '';
-  } catch {
-    return '';
-  }
-};
-
-const saveName = (name: string) => {
-  try {
-    window.localStorage.setItem(SAVED_NAME_KEY, name);
-  } catch {
-    return;
-  }
-};
-
-const SendButton = ({ disabled }: { disabled: boolean }) => (
-  <button type="submit" className="neo-chat-send" aria-label="Gửi" disabled={disabled}>
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  </button>
-);
-
-const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJoinDialogProps) => {
+const GraduationJoinDialog = ({ open, invite, onClose, onWish }: GraduationJoinDialogProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const logRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLDivElement>(null);
   const session = useRef(0);
   const [step, setStep] = useState<Step>('name');
@@ -86,6 +64,8 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
 
   const addLines = (from: NeoChatLine['from'], texts: string[]) =>
     setLines((current) => [...current, ...texts.map((text) => ({ from, text }))]);
+
+  const lastAssistantLine = () => [...lines].reverse().find((line) => line.from === 'assistant')?.text ?? '';
 
   const assistantSays = async (texts: string[], nextMood: NeoMood) => {
     const current = session.current;
@@ -102,25 +82,28 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
     if (!dialog) return;
     if (open && !dialog.open) {
       session.current += 1;
-      setStep('name');
       setMood('greet');
       setLines([]);
       setTyping(false);
       setSentWish(false);
-      setDraft(readSavedName() || guestName);
+      setDraft('');
       dialog.showModal();
-      assistantSays(INTRO, 'greet');
+      if (invite) {
+        setName(invite.name);
+        setStep('rsvp');
+        assistantSays([pickRandom(INVITE_GREETINGS).replace('{name}', invite.name), ASK_ATTENDANCE], 'happy');
+      } else {
+        setStep('name');
+        setDraft(readStorage('localStorage', SAVED_NAME_KEY) ?? '');
+        assistantSays(INTRO, 'greet');
+      }
     }
     if (!open && dialog.open) dialog.close();
-  }, [open, guestName]);
+  }, [open, invite]);
 
   useEffect(() => {
     if (open && !typing) composerRef.current?.querySelector<HTMLElement>('input, textarea, button:not([disabled])')?.focus();
   }, [open, step, typing]);
-
-  useEffect(() => {
-    logRef.current?.scrollTo({ top: logRef.current.scrollHeight, behavior: 'smooth' });
-  }, [lines, typing]);
 
   const closeOnBackdrop = (e: MouseEvent<HTMLDialogElement>) => {
     if (e.target === e.currentTarget) onClose();
@@ -133,11 +116,9 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
     }
   };
 
-  const lastAssistantLine = () => [...lines].reverse().find((line) => line.from === 'assistant')?.text ?? '';
-
   const submitName = async (e: FormEvent) => {
     e.preventDefault();
-    const value = normalize(draft);
+    const value = cleanText(draft);
     if (!value || typing) return;
 
     const current = session.current;
@@ -152,12 +133,9 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
       if (review.valid) {
         setName(value);
         setStep('rsvp');
-        await assistantSays(
-          [review.reply || `Chào ${value}!`, `Bạn có tới chung vui cùng Nhựt lúc ${CONFIG.gio}, ${CONFIG.ngay} không?`],
-          'happy'
-        );
+        await assistantSays([review.reply || `Chào ${value}!`, ASK_ATTENDANCE], 'happy');
       } else {
-        await assistantSays([review.reply || pickFallback(NAME_ERRORS, previous)], 'smug');
+        await assistantSays([review.reply || pickOther(NAME_ERRORS, previous)], 'smug');
       }
     } catch {
       await assistantSays([NETWORK_ERROR], 'sorry');
@@ -191,17 +169,17 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
     setMood('think');
     setTyping(true);
     try {
-      const result = await sendGuestResponse({ name, attending, wish: text });
+      const guest = invite ? { invite: invite.token } : { name };
+      const result = await sendGuestResponse({ ...guest, attending, wish: text });
       if (current !== session.current) return;
+      setDraft('');
       if (!result.valid) {
-        setDraft('');
-        await assistantSays([result.reply || pickFallback(WISH_NUDGES, previous)], 'smug');
+        await assistantSays([result.reply || pickOther(WISH_NUDGES, previous)], 'smug');
         return;
       }
-      saveName(name);
+      if (!invite) writeStorage('localStorage', SAVED_NAME_KEY, name);
       if (text) onWish({ name, wish: text });
       setSentWish(Boolean(text));
-      setDraft('');
       setStep('done');
       await assistantSays(
         [
@@ -218,7 +196,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
 
   const submitWish = (e: FormEvent) => {
     e.preventDefault();
-    const text = normalize(draft);
+    const text = cleanText(draft);
     if (text) send(text);
   };
 
@@ -236,34 +214,17 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
       onClick={closeOnBackdrop}
     >
       <div className="grad-chat-stage">
-        <div key={mood} className="neo-chat-mascot grad-chat-mascot">
-          <NeoAsis mood={mood} />
-        </div>
+        <NeoChatMascot mood={mood} className="grad-chat-mascot" />
 
         <div className="neo-chat-card">
-          <header className="neo-chat-header">
-            <h2 id="grad-chat-title" className="neo-chat-name">Neo Asis</h2>
-            <p className="neo-chat-status">
-              <span className="neo-chat-dot" aria-hidden="true" />
-              {STATUS[mood]}
-            </p>
-            <button type="button" className="neo-chat-close" aria-label="Đóng" onClick={onClose}>
-              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
-              </svg>
-            </button>
-          </header>
+          <NeoChatHeader titleId="grad-chat-title" status={STATUS[mood]} closeLabel="Đóng" onClose={onClose} />
 
-          <div ref={logRef} className="neo-chat-log" role="log" aria-live="polite" aria-label="Trò chuyện với Neo Asis">
+          <NeoChatLog label="Trò chuyện với Neo Asis" scrollKey={`${lines.length}-${typing}`}>
             {lines.map((line, index) => (
               <p key={index} className={`neo-chat-bubble is-${line.from}`}>{line.text}</p>
             ))}
-            {typing && (
-              <div className="neo-chat-bubble is-assistant is-typing" role="status" aria-label="Neo Asis đang gõ">
-                <span /><span /><span />
-              </div>
-            )}
-          </div>
+            {typing && <NeoChatTyping label="Neo Asis đang gõ" />}
+          </NeoChatLog>
 
           <div ref={composerRef} className="neo-chat-composer">
             {step === 'name' && (
@@ -278,7 +239,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
                   aria-label="Tên của bạn"
                   disabled={typing}
                 />
-                <SendButton disabled={typing || !draft.trim()} />
+                <NeoChatSend label="Gửi" disabled={typing || !draft.trim()} />
               </form>
             )}
 
@@ -292,11 +253,13 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
                     Tui bận mất rồi
                   </button>
                 </div>
-                <div className="neo-chat-meta">
-                  <button type="button" className="neo-chat-link" disabled={typing} onClick={changeName}>
-                    Đổi tên
-                  </button>
-                </div>
+                {!invite && (
+                  <div className="neo-chat-meta">
+                    <button type="button" className="neo-chat-link" disabled={typing} onClick={changeName}>
+                      Đổi tên
+                    </button>
+                  </div>
+                )}
               </>
             )}
 
@@ -314,7 +277,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
                     aria-label="Lời chúc"
                     disabled={typing}
                   />
-                  <SendButton disabled={typing || !draft.trim()} />
+                  <NeoChatSend label="Gửi" disabled={typing || !draft.trim()} />
                 </div>
                 <div className="neo-chat-meta">
                   <button type="button" className="neo-chat-link" disabled={typing} onClick={() => send('')}>

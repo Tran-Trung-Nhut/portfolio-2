@@ -1,6 +1,7 @@
 import 'server-only';
 import { GUEST_INPUT_MAX_LENGTH, NAME_MAX_LENGTH } from '@/shared/graduationConfig';
 import { GuestReview } from '@/shared/types';
+import { cleanText } from '@/shared/utils';
 
 const NAME_PATTERN = /^[\p{L}\p{M}][\p{L}\p{M} .'-]*$/u;
 const REPLY_MAX_LENGTH = 160;
@@ -36,14 +37,10 @@ INVALID: a firm but playful nudge telling them to write a proper, kind wish for 
 
 Respond with JSON only: {"valid": true, "reply": ""}`;
 
-export const normalizeName = (value: unknown) =>
-  typeof value === 'string' ? value.normalize('NFC').replace(/\s+/g, ' ').trim() : '';
-
 export const isNameShaped = (name: string) =>
   Boolean(name) && Array.from(name).length <= NAME_MAX_LENGTH && NAME_PATTERN.test(name);
 
-const toReply = (value: unknown) =>
-  typeof value === 'string' ? Array.from(value.trim()).slice(0, REPLY_MAX_LENGTH).join('') : '';
+const toReply = (value: unknown) => Array.from(cleanText(value)).slice(0, REPLY_MAX_LENGTH).join('');
 
 const askModel = async (prompt: string, input: string): Promise<GuestReview | null> => {
   const apiUrl = process.env.GROQ_API_URL?.trim() || '';
