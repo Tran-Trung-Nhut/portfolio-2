@@ -58,6 +58,11 @@ export interface ChatMessage {
   tool_calls?: any[];
 }
 
+export interface ChatbotReply {
+  message: string;
+  mood: NeoMood;
+}
+
 export interface ChatbotRequestBody {
   userQuery?: string;
   history?: ChatMessage[];

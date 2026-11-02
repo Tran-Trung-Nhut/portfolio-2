@@ -4,7 +4,6 @@ import { useState, type FormEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { NeoChatHeader, NeoChatLog, NeoChatMascot, NeoChatSend, NeoChatTyping } from '@/components/NeoChat';
 import { fetchChatbotResponse } from '@/services/chatbotService';
-import { FALLBACK_MESSAGE } from '@/shared/constants';
 import { nunito } from '@/shared/fonts';
 import { ChatMessage } from '@/shared/interfaces';
 import { NeoMood } from '@/shared/types';
@@ -30,7 +29,7 @@ const STATUS: Record<NeoMood, string> = {
   answer: 'Here’s what I found',
   happy: 'Happy to help!',
   sorry: 'Having a little trouble…',
-  smug: 'Hmm…',
+  smug: 'Hmm… really?',
 };
 
 const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
@@ -51,8 +50,8 @@ const ChatbotWindow = ({ isOpen, onClose, isOnline }: ChatbotWindowProps) => {
     const reply = await fetchChatbotResponse(text, history);
 
     setIsLoading(false);
-    setMood(reply === FALLBACK_MESSAGE ? 'sorry' : 'answer');
-    setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
+    setMood(reply.mood);
+    setMessages(prev => [...prev, { role: 'assistant', content: reply.message }]);
   };
 
   const handleSubmit = (e: FormEvent) => {

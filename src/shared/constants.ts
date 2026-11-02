@@ -14,6 +14,7 @@ import { GiShuttlecock } from "react-icons/gi";
 import { RiOpenaiFill } from "react-icons/ri";
 import { IconType } from "react-icons";
 import { IconDescriptor } from '@/shared/interfaces';
+import { NeoMood } from '@/shared/types';
 
 // ─── NAV ITEMS ─────────────────────────────────────────────
 export const navItems = [
@@ -82,6 +83,8 @@ export const FALLBACK_MESSAGE =
 
 // One lookup per topic, plus the final answer
 export const MAX_TOOL_ROUNDS = 6;
+
+export const CHATBOT_MOODS = ['answer', 'happy', 'smug'] as const satisfies readonly NeoMood[];
 
 export const TOOLS = [
   {
