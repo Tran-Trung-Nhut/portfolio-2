@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { appendRow, hasSheetsConfig, readRows } from '@/lib/googleSheets';
-import { isNameShaped, normalizeName } from '@/lib/guestName';
+import { isNameShaped, normalizeName, reviewWish } from '@/lib/guestReview';
 import { WISH_MAX_LENGTH } from '@/shared/graduationConfig';
 import { GuestResponseBody } from '@/shared/interfaces';
 import { GraduationWish } from '@/shared/types';
@@ -39,6 +39,12 @@ export async function POST(req: NextRequest) {
     }
     if (!isNameShaped(name)) {
       return NextResponse.json({ error: 'INVALID_NAME' }, { status: 400 });
+    }
+    if (wish) {
+      const review = await reviewWish(wish);
+      if (!review.valid) {
+        return NextResponse.json({ error: 'INAPPROPRIATE_WISH', reply: review.reply }, { status: 422 });
+      }
     }
     if (!hasSheetsConfig) {
       return NextResponse.json({ error: 'MISSING_KEYS' }, { status: 500 });
