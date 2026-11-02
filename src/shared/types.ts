@@ -88,3 +88,9 @@ export interface GraduationConfig {
   mapQuery: string;
   khachMacDinh: string;
 }
+
+export interface GraduationWish {
+  name: string;
+  wish: string;
+  mine?: boolean;
+}

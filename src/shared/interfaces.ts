@@ -1,5 +1,6 @@
+import type { ReactNode } from 'react';
 import { IconType } from "react-icons";
-import { Experience, FreelanceService, Hobby, Profile, Project, Publication, Stat, TechItem } from '@/shared/types';
+import { Experience, FreelanceService, GraduationWish, Hobby, Profile, Project, Publication, Stat, TechItem } from '@/shared/types';
 
 export interface ContactRequestBody {
   name?: string;
@@ -78,4 +79,28 @@ export interface GraduationCountdownProps {
   end: number;
   initialNow: number;
   className?: string;
+}
+
+export interface GuestResponseBody {
+  name?: string;
+  attending?: boolean;
+  wish?: string;
+}
+
+export interface GuestResponsePayload {
+  name: string;
+  attending: boolean;
+  wish: string;
+}
+
+export interface GraduationGuestbookProps {
+  guestName: string;
+  children: ReactNode;
+}
+
+export interface GraduationJoinDialogProps {
+  open: boolean;
+  guestName: string;
+  onClose: () => void;
+  onWish: (wish: GraduationWish) => void;
 }

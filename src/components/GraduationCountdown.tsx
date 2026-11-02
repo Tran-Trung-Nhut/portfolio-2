@@ -48,26 +48,25 @@ const GraduationCountdown = ({ start, end, initialNow, className = '' }: Graduat
   }
 
   const { days, hours, minutes, seconds } = getParts(start - now);
-  const label = `Còn ${days} ngày ${hours} giờ ${minutes} phút tới buổi lễ`;
+  const parts = [
+    { value: days, unit: 'ngày' },
+    { value: hours, unit: 'tiếng' },
+    { value: minutes, unit: 'phút' },
+    { value: seconds, unit: 'giây' },
+  ];
+  const label = `Còn ${days} ngày ${hours} tiếng ${minutes} phút tới buổi lễ`;
 
   return (
     <div className={`grad-countdown ${className}`} role="timer" aria-label={label}>
       <span className="grad-countdown-label" aria-hidden="true">ĐẾM NGƯỢC</span>
       <p className="grad-countdown-value" aria-hidden="true">
         <span className="grad-countdown-word">Còn</span>
-        {days > 0 && (
-          <>
-            <span className="grad-countdown-num">{days}</span>
-            <span className="grad-countdown-word">ngày</span>
-          </>
-        )}
-        <span className="grad-countdown-num">
-          {pad(hours)}
-          <span className="grad-countdown-colon">:</span>
-          {pad(minutes)}
-          <span className="grad-countdown-colon">:</span>
-          {pad(seconds)}
-        </span>
+        {parts.map(({ value, unit }) => (
+          <span key={unit} className="grad-countdown-part">
+            <span className="grad-countdown-num">{pad(value)}</span>
+            <span className="grad-countdown-word">{unit}</span>
+          </span>
+        ))}
       </p>
     </div>
   );
