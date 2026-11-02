@@ -79,8 +79,6 @@ export interface Stat {
   label: string;
 }
 
-// ─── GRADUATION INVITATION ───
-
 export interface GraduationConfig {
   gio: string;
   ngay: string;

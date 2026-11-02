@@ -7,14 +7,12 @@ const EVENT_DETAILS = 'Lễ Tốt nghiệp Cử nhân Khoa học Máy tính củ
 const MAP_LINK = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(CONFIG.mapQuery);
 const MAP_EMBED = 'https://maps.google.com/maps?hl=vi&z=17&output=embed&q=' + encodeURIComponent(CONFIG.mapQuery);
 
-// 2027-01-16T08:00:00+07:00 -> 20270116T010000Z (Google Calendar format)
 const toGCalDate = (iso: string) => {
   const date = new Date(iso);
   if (Number.isNaN(date.getTime())) return null;
   return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 };
 
-// Hidden when batDau/ketThuc are empty or invalid
 const buildCalendarUrl = () => {
   if (!CONFIG.batDau || !CONFIG.ketThuc) return null;
   const start = toGCalDate(CONFIG.batDau);
@@ -32,8 +30,6 @@ const buildCalendarUrl = () => {
 
 const CALENDAR_URL = buildCalendarUrl();
 
-// guestName comes from ?khach= and is only ever rendered as a text node
-// (React escapes it), never injected as HTML.
 const GraduationPage = ({ guestName }: GraduationPageProps) => {
   return (
     <div className="grad-page" lang="vi">
@@ -44,7 +40,6 @@ const GraduationPage = ({ guestName }: GraduationPageProps) => {
           <span className="grad-tag">BÁCH KHOA · KHMT</span>
         </div>
 
-        {/* Decorative code block; the readable invitation is in the output below */}
         <div className="grad-code" aria-hidden="true">
           <span className="grad-ln"><span className="grad-c">{'// TRƯỜNG ĐẠI HỌC BÁCH KHOA – ĐHQG-HCM'}</span></span>
           <span className="grad-ln">{' '}</span>
@@ -65,7 +60,6 @@ const GraduationPage = ({ guestName }: GraduationPageProps) => {
           <p className="grad-prompt grad-reveal" aria-hidden="true"><b>$</b> npm run tot-nghiep</p>
           <p className="grad-lead grad-reveal grad-d1">Trân trọng kính mời</p>
           <div className="grad-guest grad-reveal grad-d2">
-            {/* Cursor sits inline so it follows the last word when the name wraps */}
             <h1>{guestName}<span className="grad-cursor" aria-hidden="true"></span></h1>
           </div>
           <p className="grad-desc grad-reveal grad-d3">

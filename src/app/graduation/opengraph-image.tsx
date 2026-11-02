@@ -5,7 +5,6 @@ export const alt = 'Thư mời Lễ Tốt nghiệp – Trần Trung Nhựt';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-// Satori has no CSS variables: same values as variables.css / graduation.css
 const COLORS = {
   bg: '#0b0d17',
   panel: '#151833',
@@ -31,7 +30,6 @@ const TEXT = {
   venue: `@ ${GRADUATION_CONFIG.diaDiem}`,
 };
 
-// Fetch only the glyphs we need (incl. Vietnamese) from Google Fonts as TTF
 const loadGoogleFont = async (family: string, weight: number, text: string) => {
   const url = `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}&text=${encodeURIComponent(text)}`;
   const css = await (await fetch(url)).text();
@@ -56,7 +54,6 @@ const loadFonts = async () => {
       { name: 'JetBrains Mono', data: mono, weight: 400 as const, style: 'normal' as const },
     ];
   } catch (error) {
-    // Fall back to the default font rather than failing the build
     console.warn('[graduation og:image] Could not load Google Fonts:', error);
     return undefined;
   }
@@ -95,7 +92,6 @@ export default async function Image() {
             boxShadow: '0 30px 80px rgba(0, 0, 0, 0.45)',
           }}
         >
-          {/* Title bar */}
           <div
             style={{
               display: 'flex',
@@ -116,7 +112,6 @@ export default async function Image() {
             <div style={{ marginLeft: 'auto', fontSize: 18, letterSpacing: 2, color: COLORS.dim }}>{TEXT.tag}</div>
           </div>
 
-          {/* Output */}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 64px' }}>
             <div style={{ display: 'flex', fontFamily: mono, fontSize: 24, color: COLORS.dim }}>
               <span style={{ color: COLORS.keyword, marginRight: 14 }}>$</span>

@@ -25,7 +25,6 @@ export const navItems = [
   { label: "Contact", path: "/contact" },
 ];
 
-// Pages rendered on their own, without navbar/footer/chatbot (shared by link only)
 export const STANDALONE_PATHS = ["/graduation"];
 
 // ─── ICON & COLOR MAPPING ──────────────────────────────────

@@ -1,6 +1,4 @@
-/* ─── Graduation Invitation (/graduation) ───────────────── */
 .grad-page {
-  /* Invitation tokens mapped onto the portfolio palette (variables.css) */
   --grad-bg: var(--bg-primary);
   --grad-panel: var(--bg-card);
   --grad-panel-2: var(--bg-secondary);
@@ -74,7 +72,6 @@
   color: var(--grad-dim);
 }
 
-/* Decorative code block (the readable content is in the output below) */
 .grad-code {
   padding: 28px 24px 28px 8px;
   overflow-x: auto;
@@ -103,7 +100,6 @@
 .grad-k { color: var(--grad-keyword); }
 .grad-s { color: var(--grad-string); }
 
-/* "Program output": the readable invitation */
 .grad-output {
   padding: 28px 32px 36px;
   background: var(--grad-panel-2);
@@ -201,7 +197,6 @@
   color: var(--grad-muted);
 }
 
-/* Embedded Google Map, tinted dark to sit inside the terminal window */
 .grad-map {
   margin-top: 24px;
   aspect-ratio: 16 / 7;
@@ -269,7 +264,6 @@
   color: var(--grad-comment);
 }
 
-/* Lines appear one by one, like a terminal running */
 .grad-reveal {
   opacity: 0;
   transform: translateY(6px);
