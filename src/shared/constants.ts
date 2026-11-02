@@ -25,6 +25,9 @@ export const navItems = [
   { label: "Contact", path: "/contact" },
 ];
 
+// Pages rendered on their own, without navbar/footer/chatbot (shared by link only)
+export const STANDALONE_PATHS = ["/graduation"];
+
 // ─── ICON & COLOR MAPPING ──────────────────────────────────
 export const TECH_ICON_MAP: Record<string, IconDescriptor> = {
   "TypeScript": { icon: SiTypescript, color: "#3178C6" },

@@ -3,6 +3,7 @@ import '../index.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ChatbotButton from '@/components/ChatbotButton';
+import SiteChrome from '@/components/SiteChrome';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.trantrungnhut.id.vn'),
@@ -62,10 +63,14 @@ export default function RootLayout({
       </head>
       <body>
         <div className="page-container">
-          <Navbar />
+          <SiteChrome>
+            <Navbar />
+          </SiteChrome>
           {children}
-          <Footer />
-          <ChatbotButton />
+          <SiteChrome>
+            <Footer />
+            <ChatbotButton />
+          </SiteChrome>
         </div>
       </body>
     </html>
