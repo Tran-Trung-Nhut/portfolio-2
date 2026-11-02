@@ -1,21 +1,19 @@
 'use client';
 
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent, type MouseEvent } from 'react';
-import { Nunito } from 'next/font/google';
-import GraduationMochi from '@/components/GraduationMochi';
+import NeoAsis from '@/components/NeoAsis';
 import { checkGuestName, sendGuestResponse } from '@/services/graduationService';
 import { GRADUATION_CONFIG as CONFIG, NAME_MAX_LENGTH, WISH_MAX_LENGTH } from '@/shared/graduationConfig';
 import { GraduationJoinDialogProps } from '@/shared/interfaces';
-import { MochiLine, MochiMood } from '@/shared/types';
-
-const nunito = Nunito({ subsets: ['latin', 'vietnamese'], weight: ['600', '700', '800'], display: 'swap' });
+import { nunito } from '@/shared/fonts';
+import { NeoChatLine, NeoMood } from '@/shared/types';
 
 type Step = 'name' | 'rsvp' | 'wish' | 'done';
 
 const SAVED_NAME_KEY = 'graduation-guest-name';
 const TYPING_MS = 650;
 
-const STATUS: Record<MochiMood, string> = {
+const STATUS: Record<NeoMood, string> = {
   greet: 'Đang chờ bạn…',
   think: 'Đang suy nghĩ…',
   answer: 'Đang trả lời…',
@@ -24,7 +22,7 @@ const STATUS: Record<MochiMood, string> = {
   smug: 'Đang nhìn bạn đầy nghi ngờ…',
 };
 
-const INTRO = ['Chào bạn! Tui là Mochi, trợ lý của Nhựt nè.', 'Trước khi vào tiệc, cho tui hỏi: bạn là ai vậy?'];
+const INTRO = ['Chào bạn! Tui là Neo Asis, trợ lý của Nhựt nè.', 'Trước khi vào tiệc, cho tui hỏi: bạn là ai vậy?'];
 
 const NAME_ERRORS = [
   'Hứ, cái đó mà là tên hả? Nhập tên thật đi, tui mới biết bạn là ai chứ!',
@@ -59,7 +57,7 @@ const saveName = (name: string) => {
 };
 
 const SendButton = ({ disabled }: { disabled: boolean }) => (
-  <button type="submit" className="grad-chat-send" aria-label="Gửi" disabled={disabled}>
+  <button type="submit" className="neo-chat-send" aria-label="Gửi" disabled={disabled}>
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
       <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
@@ -72,25 +70,25 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
   const composerRef = useRef<HTMLDivElement>(null);
   const session = useRef(0);
   const [step, setStep] = useState<Step>('name');
-  const [mood, setMood] = useState<MochiMood>('greet');
-  const [lines, setLines] = useState<MochiLine[]>([]);
+  const [mood, setMood] = useState<NeoMood>('greet');
+  const [lines, setLines] = useState<NeoChatLine[]>([]);
   const [typing, setTyping] = useState(false);
   const [draft, setDraft] = useState('');
   const [name, setName] = useState('');
   const [attending, setAttending] = useState(true);
   const [sentWish, setSentWish] = useState(false);
 
-  const addLines = (from: MochiLine['from'], texts: string[]) =>
+  const addLines = (from: NeoChatLine['from'], texts: string[]) =>
     setLines((current) => [...current, ...texts.map((text) => ({ from, text }))]);
 
-  const mochiSays = async (texts: string[], nextMood: MochiMood) => {
+  const assistantSays = async (texts: string[], nextMood: NeoMood) => {
     const current = session.current;
     setTyping(true);
     await wait(TYPING_MS);
     if (current !== session.current) return;
     setTyping(false);
     setMood(nextMood);
-    addLines('mochi', texts);
+    addLines('assistant', texts);
   };
 
   useEffect(() => {
@@ -105,7 +103,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
       setSentWish(false);
       setDraft(readSavedName() || guestName);
       dialog.showModal();
-      mochiSays(INTRO, 'greet');
+      assistantSays(INTRO, 'greet');
     }
     if (!open && dialog.open) dialog.close();
   }, [open, guestName]);
@@ -135,8 +133,8 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
     if (!value || typing) return;
 
     const current = session.current;
-    const previous = [...lines].reverse().find((line) => line.from === 'mochi')?.text ?? '';
-    addLines('guest', [value]);
+    const previous = [...lines].reverse().find((line) => line.from === 'assistant')?.text ?? '';
+    addLines('user', [value]);
     setDraft('');
     setMood('think');
     setTyping(true);
@@ -146,23 +144,23 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
       if (review.valid) {
         setName(value);
         setStep('rsvp');
-        await mochiSays(
+        await assistantSays(
           [review.reply || `Chào ${value}!`, `Bạn có tới chung vui cùng Nhựt lúc ${CONFIG.gio}, ${CONFIG.ngay} không?`],
           'happy'
         );
       } else {
-        await mochiSays([review.reply || pickNameError(previous)], 'smug');
+        await assistantSays([review.reply || pickNameError(previous)], 'smug');
       }
     } catch {
-      await mochiSays([NETWORK_ERROR], 'sorry');
+      await assistantSays([NETWORK_ERROR], 'sorry');
     }
   };
 
   const chooseAttending = (value: boolean) => {
     setAttending(value);
     setStep('wish');
-    addLines('guest', [value ? 'Oke, tham gia cùng Nhựt!' : 'Tui bận mất rồi…']);
-    mochiSays(
+    addLines('user', [value ? 'Oke, tham gia cùng Nhựt!' : 'Tui bận mất rồi…']);
+    assistantSays(
       value
         ? ['Tuyệt vời! Nhựt mà biết chắc vui lắm luôn.', 'Gửi Nhựt một lời chúc nhé?']
         : ['Tiếc ghê… nhưng không sao đâu!', 'Vậy gửi Nhựt một lời chúc nhé?'],
@@ -173,14 +171,14 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
   const changeName = () => {
     setStep('name');
     setDraft(name);
-    addLines('guest', ['Khoan, tui nhập lộn tên…']);
-    mochiSays(['Vậy rốt cuộc bạn là ai?'], 'think');
+    addLines('user', ['Khoan, tui nhập lộn tên…']);
+    assistantSays(['Vậy rốt cuộc bạn là ai?'], 'think');
   };
 
   const send = async (text: string) => {
     if (typing) return;
     const current = session.current;
-    addLines('guest', [text || 'Thôi, để dịp khác nha.']);
+    addLines('user', [text || 'Thôi, để dịp khác nha.']);
     setMood('answer');
     setTyping(true);
     try {
@@ -191,7 +189,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
       setSentWish(Boolean(text));
       setDraft('');
       setStep('done');
-      await mochiSays(
+      await assistantSays(
         [
           attending
             ? `Cảm ơn ${name}! Hẹn gặp bạn lúc ${CONFIG.gio}, ${CONFIG.ngay} tại ${CONFIG.diaDiem} nha.`
@@ -200,7 +198,7 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
         'happy'
       );
     } catch {
-      await mochiSays([NETWORK_ERROR], 'sorry');
+      await assistantSays([NETWORK_ERROR], 'sorry');
     }
   };
 
@@ -218,46 +216,46 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
   return (
     <dialog
       ref={dialogRef}
-      className={`grad-chat ${nunito.className}`}
+      className={`grad-chat neo-chat ${nunito.className}`}
       aria-labelledby="grad-chat-title"
       onClose={onClose}
       onClick={closeOnBackdrop}
     >
       <div className="grad-chat-stage">
-        <div key={mood} className="grad-chat-mochi">
-          <GraduationMochi mood={mood} />
+        <div key={mood} className="neo-chat-mascot grad-chat-mascot">
+          <NeoAsis mood={mood} />
         </div>
 
-        <div className="grad-chat-card">
-          <header className="grad-chat-header">
-            <h2 id="grad-chat-title" className="grad-chat-name">Mochi</h2>
-            <p className="grad-chat-status">
-              <span className="grad-chat-dot" aria-hidden="true" />
+        <div className="neo-chat-card">
+          <header className="neo-chat-header">
+            <h2 id="grad-chat-title" className="neo-chat-name">Neo Asis</h2>
+            <p className="neo-chat-status">
+              <span className="neo-chat-dot" aria-hidden="true" />
               {STATUS[mood]}
             </p>
-            <button type="button" className="grad-chat-close" aria-label="Đóng" onClick={onClose}>
+            <button type="button" className="neo-chat-close" aria-label="Đóng" onClick={onClose}>
               <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
               </svg>
             </button>
           </header>
 
-          <div ref={logRef} className="grad-chat-log" role="log" aria-live="polite" aria-label="Trò chuyện với Mochi">
+          <div ref={logRef} className="neo-chat-log" role="log" aria-live="polite" aria-label="Trò chuyện với Neo Asis">
             {lines.map((line, index) => (
-              <p key={index} className={`grad-chat-bubble is-${line.from}`}>{line.text}</p>
+              <p key={index} className={`neo-chat-bubble is-${line.from}`}>{line.text}</p>
             ))}
             {typing && (
-              <div className="grad-chat-bubble is-mochi is-typing" role="status" aria-label="Mochi đang gõ">
+              <div className="neo-chat-bubble is-assistant is-typing" role="status" aria-label="Neo Asis đang gõ">
                 <span /><span /><span />
               </div>
             )}
           </div>
 
-          <div ref={composerRef} className="grad-chat-composer">
+          <div ref={composerRef} className="neo-chat-composer">
             {step === 'name' && (
-              <form className="grad-chat-form" onSubmit={submitName}>
+              <form className="neo-chat-form" onSubmit={submitName}>
                 <input
-                  className="grad-chat-field"
+                  className="neo-chat-field"
                   value={draft}
                   onChange={(e) => setDraft(e.target.value)}
                   maxLength={NAME_MAX_LENGTH}
@@ -272,16 +270,16 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
 
             {step === 'rsvp' && (
               <>
-                <div className="grad-chat-choices is-stacked">
-                  <button type="button" className="grad-chat-choice is-primary" disabled={typing} onClick={() => chooseAttending(true)}>
+                <div className="neo-chat-choices is-stacked">
+                  <button type="button" className="neo-chat-choice is-primary" disabled={typing} onClick={() => chooseAttending(true)}>
                     Oke, tham gia cùng Nhựt
                   </button>
-                  <button type="button" className="grad-chat-choice" disabled={typing} onClick={() => chooseAttending(false)}>
+                  <button type="button" className="neo-chat-choice" disabled={typing} onClick={() => chooseAttending(false)}>
                     Tui bận mất rồi
                   </button>
                 </div>
-                <div className="grad-chat-meta">
-                  <button type="button" className="grad-chat-link" disabled={typing} onClick={changeName}>
+                <div className="neo-chat-meta">
+                  <button type="button" className="neo-chat-link" disabled={typing} onClick={changeName}>
                     Đổi tên
                   </button>
                 </div>
@@ -290,9 +288,9 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
 
             {step === 'wish' && (
               <form onSubmit={submitWish}>
-                <div className="grad-chat-form">
+                <div className="neo-chat-form">
                   <textarea
-                    className="grad-chat-field"
+                    className="neo-chat-field"
                     rows={2}
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}
@@ -304,8 +302,8 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
                   />
                   <SendButton disabled={typing || !draft.trim()} />
                 </div>
-                <div className="grad-chat-meta">
-                  <button type="button" className="grad-chat-link" disabled={typing} onClick={() => send('')}>
+                <div className="neo-chat-meta">
+                  <button type="button" className="neo-chat-link" disabled={typing} onClick={() => send('')}>
                     Bỏ qua
                   </button>
                   <span aria-hidden="true">{draft.length}/{WISH_MAX_LENGTH}</span>
@@ -314,13 +312,13 @@ const GraduationJoinDialog = ({ open, guestName, onClose, onWish }: GraduationJo
             )}
 
             {step === 'done' && (
-              <div className="grad-chat-choices">
+              <div className="neo-chat-choices">
                 {sentWish && (
-                  <button type="button" className="grad-chat-choice is-primary" disabled={typing} onClick={finish}>
+                  <button type="button" className="neo-chat-choice is-primary" disabled={typing} onClick={finish}>
                     Xem lời chúc
                   </button>
                 )}
-                <button type="button" className={`grad-chat-choice${sentWish ? '' : ' is-primary'}`} disabled={typing} onClick={onClose}>
+                <button type="button" className={`neo-chat-choice${sentWish ? '' : ' is-primary'}`} disabled={typing} onClick={onClose}>
                   Đóng
                 </button>
               </div>

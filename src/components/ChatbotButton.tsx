@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaRobot } from 'react-icons/fa';
 import ChatbotWindow from '@/components/ChatbotWindow';
+import NeoAsis from '@/components/NeoAsis';
 
 const ChatbotButton = () => {
   const [showTooltip, setShowTooltip] = useState(true);
@@ -19,24 +19,25 @@ const ChatbotButton = () => {
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
-    if (!isOpen) setShowTooltip(false); 
+    if (!isOpen) setShowTooltip(false);
   };
 
   return (
     <div className="chatbot-wrapper">
       <ChatbotWindow isOpen={isOpen} onClose={() => setIsOpen(false)} isOnline={isOnline} />
 
-      {/* FAB Button always visible */}
       <div className="chatbot-fab-container">
         <div className={`chatbot-tooltip ${showTooltip && !isOpen && isOnline ? 'visible' : ''}`}>
-          Ask AI assistant about Nhựt
+          Hi! Ask Neo Asis about Nhựt
         </div>
-        <button 
+        <button
+          type="button"
           className={`chatbot-fab ${isOpen ? 'active' : ''}`}
-          aria-label="Toggle AI Assistant"
+          aria-label={isOpen ? 'Close chat with Neo Asis' : 'Chat with Neo Asis'}
+          aria-expanded={isOpen}
           onClick={handleToggle}
         >
-          <FaRobot />
+          <NeoAsis variant="avatar" mood="greet" />
           <span className={`chatbot-online-dot ${!isOnline ? 'offline' : ''}`}></span>
         </button>
       </div>

@@ -100,9 +100,9 @@ export interface GuestNameReview {
   reply: string;
 }
 
-export type MochiMood = 'greet' | 'think' | 'answer' | 'happy' | 'sorry' | 'smug';
+export type NeoMood = 'greet' | 'think' | 'answer' | 'happy' | 'sorry' | 'smug';
 
-export interface MochiLine {
-  from: 'mochi' | 'guest';
+export interface NeoChatLine {
+  from: 'assistant' | 'user';
   text: string;
 }
