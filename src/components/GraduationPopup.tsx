@@ -11,7 +11,7 @@ type PopupStatus = 'hidden' | 'open' | 'closing';
 
 const isDismissed = () => {
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === '1';
+    return window.sessionStorage.getItem(STORAGE_KEY) === '1';
   } catch {
     return false;
   }
@@ -19,7 +19,7 @@ const isDismissed = () => {
 
 const rememberDismissed = () => {
   try {
-    window.localStorage.setItem(STORAGE_KEY, '1');
+    window.sessionStorage.setItem(STORAGE_KEY, '1');
   } catch {
     return;
   }
