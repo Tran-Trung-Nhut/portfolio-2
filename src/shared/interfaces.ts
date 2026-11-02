@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { IconType } from "react-icons";
-import { Experience, FreelanceService, GraduationWish, Hobby, MochiMood, Profile, Project, Publication, Stat, TechItem } from '@/shared/types';
+import { Experience, FreelanceService, GraduationWish, Hobby, NeoMood, Profile, Project, Publication, Stat, TechItem } from '@/shared/types';
 
 export interface ContactRequestBody {
   name?: string;
@@ -105,6 +105,7 @@ export interface GraduationJoinDialogProps {
   onWish: (wish: GraduationWish) => void;
 }
 
-export interface GraduationMochiProps {
-  mood: MochiMood;
+export interface NeoAsisProps {
+  mood: NeoMood;
+  variant?: 'full' | 'avatar';
 }

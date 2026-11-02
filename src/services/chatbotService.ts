@@ -1,4 +1,5 @@
 import { ChatMessage } from "@/shared/interfaces";
+import { FALLBACK_MESSAGE } from "@/shared/constants";
 
 export const fetchChatbotResponse = async (userQuery: string, history: ChatMessage[]): Promise<string> => {
   try {
@@ -25,6 +26,6 @@ export const fetchChatbotResponse = async (userQuery: string, history: ChatMessa
     return data.message;
   } catch (error) {
     console.error('Chatbot Service Error:', error);
-    return `I am having some issues right now 😔. Please try again later, or contact Nhựt directly through other channels on the [Contact page](/contact).`;
+    return FALLBACK_MESSAGE;
   }
 };
