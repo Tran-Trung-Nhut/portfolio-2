@@ -8,24 +8,24 @@ const LANES = [0.15, 0.85, 0.4, 0.65];
 const SIDE_DURATIONS = [40, 46];
 
 const GraduationWishSky = () => {
-  const { wishes } = useGuestbook();
+  const { wishes, skyPool } = useGuestbook();
   const [shown, setShown] = useState<number[]>([]);
   const cursor = useRef(0);
 
   useEffect(() => {
-    const count = Math.min(MAX_BUBBLES, wishes?.length ?? 0);
+    const count = Math.min(MAX_BUBBLES, skyPool.length);
     cursor.current = count;
-    setShown(Array.from({ length: count }, (_, index) => index));
-  }, [wishes]);
+    setShown(skyPool.slice(0, count));
+  }, [skyPool]);
 
   if (!wishes || shown.length === 0) return null;
 
   const showNextWish = (bubble: number) => {
-    if (wishes.length <= shown.length) return;
+    if (skyPool.length <= shown.length) return;
     let next = cursor.current;
-    while (shown.includes(next % wishes.length)) next += 1;
+    while (shown.includes(skyPool[next % skyPool.length])) next += 1;
     cursor.current = next + 1;
-    setShown(shown.map((wishIndex, index) => (index === bubble ? next % wishes.length : wishIndex)));
+    setShown(shown.map((wishIndex, index) => (index === bubble ? skyPool[next % skyPool.length] : wishIndex)));
   };
 
   return (
@@ -36,6 +36,7 @@ const GraduationWishSky = () => {
         const sideCount = Math.ceil((shown.length - side) / 2);
         const duration = SIDE_DURATIONS[side];
         const wish = wishes[wishIndex];
+        if (!wish) return null;
         const style = {
           '--lane': LANES[order % LANES.length],
           '--sway': `${order % 2 ? -16 : 16}px`,
